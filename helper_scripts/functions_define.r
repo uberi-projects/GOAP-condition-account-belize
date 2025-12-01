@@ -58,7 +58,7 @@ check_range <- function(range_col, range_lower, range_upper, col_name, type = c(
         return(paste0(col_name, " is validated. ", sprintf("Number of NAs: %d.", na_count)))
     } else {
         return(paste0(
-            col_name, " values are expected to be within ", range_lower, "-", range_upper, ". ",
+            col_name, " values are expected to be of type ", type, " within ", range_lower, "-", range_upper, ". ",
             paste0("These values are invalid: ", combine_words(invalid)),
             sprintf(" (unexpected values occurred %d times). ", sum(!valid & !is.na(num_col))),
             sprintf("Number of NAs: %d.", na_count)
