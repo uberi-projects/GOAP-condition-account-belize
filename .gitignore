@@ -1,3 +1,6 @@
+# Data deposit files
+/data_deposit/*
+
 # History files
 .Rhistory
 .Rapp.history
