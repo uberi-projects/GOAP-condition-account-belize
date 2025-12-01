@@ -1,5 +1,8 @@
 # functions_define.r
 
+# Initialize functions list ---------------------------
+list_functions <- list()
+
 # Check a dataframe for presence of required columns ---------------------------
 #- df : The dataframe to check
 #- required_columns : The vector of required columns
@@ -12,6 +15,7 @@ check_completeness <- function(df, required_columns, df_name) {
         return(paste0("Missing required columns from ", df_name, ": ", paste(missing_cols, collapse = ", ")))
     }
 }
+list_functions$check_completeness <- check_completeness
 
 # Check a column/vector for levels in a column/vector ---------------------------
 #- grouping_col : The column or vector to check
@@ -32,6 +36,7 @@ check_grouping <- function(grouping_col, grouping_vector, col_name) {
         ))
     }
 }
+list_functions$check_grouping <- check_grouping
 
 # Check a column/vector for values in a range ---------------------------
 #- range_col : The column or vector to check
@@ -60,3 +65,7 @@ check_range <- function(range_col, range_lower, range_upper, col_name, type = c(
         ))
     }
 }
+list_functions$check_range <- check_range
+
+# Report on functions created ---------------------------
+message("New functions created: ", paste(names(list_functions), collapse = ", "))
