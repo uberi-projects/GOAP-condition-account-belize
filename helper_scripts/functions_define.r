@@ -87,5 +87,30 @@ check_date <- function(date_col, col_name) {
 }
 list_functions$check_date <- check_date
 
+# Check a column/vector for times formatted to 24-hr HH:MM and fall within specified time range ---------------------------
+#- time_col : The column or vector to check
+#- col_name : A string of the column name to use in the output message
+#- earliest_time : A string of the earliest 24hr HH:MM time allowable
+#- latest_time : A string of the latest 24hr HH:MM time allowable
+check_time <- function(time_col, col_name, earliest_time = "06:00", latest_time = "18:00") {
+    na_count <- sum(is.na(time_col))
+    time_col_parsed <- strptime(time_col, format = "%H:%M")
+    is_time <- !is.na(time_col_parsed)
+    is_daylight <- format(time_col_parsed, "%H:%M") <= latest_time & format(time_col_parsed, "%H:%M") >= earliest_time
+    valid <- is.na(time_col) | (is_time & is_daylight)
+    invalid <- unique(time_col[!valid & !is.na(time_col)])
+    if (all(valid, na.rm = TRUE)) {
+        return(paste0(col_name, " is validated. ", sprintf("Number of NAs: %d.", na_count)))
+    } else {
+        return(paste0(
+            col_name, " values are expected to be formatted in 24-hr HH:MM time within ", earliest_time, "-", latest_time, " time range. ",
+            paste0("These values are invalid: ", combine_words(invalid)),
+            sprintf(" (unexpected values occurred %d times). ", sum(!valid & !is.na(time_col))),
+            sprintf("Number of NAs: %d.", na_count)
+        ))
+    }
+}
+list_functions$check_time <- check_time
+
 # Report on functions created ---------------------------
 message("New functions created: ", paste(names(list_functions), collapse = ", "))
