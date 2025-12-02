@@ -1,5 +1,6 @@
 # Data deposit files
 /data_deposit/*
+!/data_deposit/.gitkeep
 
 # History files
 .Rhistory
