@@ -10,26 +10,23 @@ validation_msgs <- c()
 
 # Define vectors of required columns ---------------------------
 columns_sites <- c(
-    "EAA Code", "Site ID", "Depth", "Latitude", "Longitude", "MPA", "Management",
+    "EAA Code", "Site ID", "Site Name", "Depth (ft)", "Latitude", "Longitude", "MPA", "Management",
     "Protection Status", "Reef Zone", "Reef Type"
 )
-# add benthic cover
-# add benthic quadrat
-# add benthic invert
-# add coral sites
-# add coral cover
-# add coral counts
 
-# Validate Benthic Sites ---------------------------
-# validation_msgs <- c(validation_msgs, check_completeness(df_benthic_sites, columns_benthic_sites))
-# validation_msgs <- c(validation_msgs, check_grouping(df_benthic_sites$`Protection Status`, c("None", "NTZ", "CUZ", "GUZ", "PUZ"), "Protection Status"))
-# validation_msgs <- c(validation_msgs, check_range(df_benthic_sites$`Visibility (ft)`, 1, 50, "Visibility", "int"))
+# Validate  Sites ---------------------------
 
-# Validate Benthic Cover ---------------------------
+# Validate  Surveys ---------------------------
 
-# Validate Benthic Quadrats ---------------------------
+# Validate  Coral Community ---------------------------
 
-# etc.
+# Validate  Benthic Cover ---------------------------
+
+# Validate  Recruits ---------------------------
+
+# Validate  Invertebrates ---------------------------
+
+# Validate  Fish (Relief) ---------------------------
 
 # Print validation messages to text file ---------------------------
 writeLines(validation_msgs, "validation_report.txt")
