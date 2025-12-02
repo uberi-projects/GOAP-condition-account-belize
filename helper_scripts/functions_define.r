@@ -67,5 +67,25 @@ check_range <- function(range_col, range_lower, range_upper, col_name, type = c(
 }
 list_functions$check_range <- check_range
 
+# Check a column/vector for dates formatted to YYYY-MM-DD ---------------------------
+#- date_col : The column or vector to check
+#- col_name : A string of the column name to use in the output message
+check_date <- function(date_col, col_name) {
+    na_count <- sum(is.na(date_col))
+    valid <- is.na(date_col) | (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_col) & !is.na(as.Date(date_col, format = "%Y-%m-%d")))
+    invalid <- unique(date_col[!valid & !is.na(date_col)])
+    if (all(valid, na.rm = TRUE)) {
+        return(paste0(col_name, " is validated. ", sprintf("Number of NAs: %d.", na_count)))
+    } else {
+        return(paste0(
+            col_name, " values are expected to be in formatted YYYY-MM-DD. ",
+            paste0("These values are invalid: ", combine_words(invalid)),
+            sprintf(" (unexpected values occurred %d times). ", sum(!valid & !is.na(date_col))),
+            sprintf("Number of NAs: %d.", na_count)
+        ))
+    }
+}
+list_functions$check_date <- check_date
+
 # Report on functions created ---------------------------
 message("New functions created: ", paste(names(list_functions), collapse = ", "))
