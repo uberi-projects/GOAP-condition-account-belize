@@ -9,9 +9,9 @@ source("data_restructuring.r")
 validation_msgs <- c()
 
 # Define vectors of required columns ---------------------------
-columns_benthic_sites <- c(
-    "EA Period", "EAA Code", "Site ID", "Depth", "Latitude", "Longitude", "MPA", "Management",
-    "Protection Status", "Reef Zone", "Reef Type", "Visibility (ft)", "Weather"
+columns_sites <- c(
+    "EAA Code", "Site ID", "Depth", "Latitude", "Longitude", "MPA", "Management",
+    "Protection Status", "Reef Zone", "Reef Type"
 )
 # add benthic cover
 # add benthic quadrat
