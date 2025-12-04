@@ -10,8 +10,8 @@ validation_msgs <- c()
 
 # Define vectors of required columns ---------------------------
 columns_sites <- c(
-    "EAA Code", "Site ID", "Site Name", "Depth (ft)", "Latitude", "Longitude", "MPA", "Management",
-    "Protection Status", "Reef Zone", "Reef Type"
+    "Date", "EAA_Code", "Site", "Depth", "Latitude", "Longitude", "MPA_Management", "Management_Zone",
+    "Protection_Status", "Reef_Zone", "Reef_Type"
 )
 
 # Validate  Sites ---------------------------
