@@ -10,8 +10,28 @@ validation_msgs <- c()
 
 # Define vectors of required columns ---------------------------
 columns_sites <- c(
-    "Site", "Depth", "Latitude", "Longitude", "MPA_Management", "Management_Zone",
+    "EAA_Code", "Site", "Depth", "Latitude", "Longitude", "MPA_Management", "Management_Zone",
     "Protection_Status", "Reef_Zone", "Reef_Type"
+)
+columns_Benthic_Cover <- c(
+    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Transect",
+    "Point", "organism", "Secondary", "Algae_Height", "Collector"
+)
+Column_Recruits <- c(
+    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Transect", "Quadrat", "Primary_Substrate",
+    "Secondary_Substrate", "Organism", "Size", "Num", "Collector"
+)
+Colums_Invertebrates <- c(
+    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Transect", "Species", "Num", "Collector"
+)
+Columns_Coral_Community <- c(
+    "Date", "EA_Period", "Site", "Transect", "Area_Surveyed", "Temp", "Visibility", "Weather", "Start_Depth", 
+    "End_Depth", "Organism",	"Isolates",	"Max_Length",	"Max_Width",	"Max_Height",	"Percent_Pale",	"Percent_Bleach",	
+    "OD", "Disease",	"Clump_L",	"Clump_P", "Clump_BL",	"Clump_NM",	"Clump_TM",	"Clump_OM",	"Clump_Other",
+    "Clump_Interval",	"Collector"
+)
+Columns_Relief <- c(
+    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Max_Relief", "Collector" 
 )
 
 # Validate  Sites ---------------------------
