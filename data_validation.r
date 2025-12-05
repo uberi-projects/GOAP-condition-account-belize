@@ -4,6 +4,7 @@
 source("helper_scripts/packages_load.r")
 source("helper_scripts/functions_define.r")
 source("data_restructuring.r")
+source("helper_scripts/data_test_load.r")
 
 # Initialize validation messages vector ---------------------------
 validation_msgs <- c()
@@ -25,13 +26,13 @@ columns_invertebrates <- c(
     "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Transect", "Species", "Num", "Collector"
 )
 columns_coral_community <- c(
-    "Date", "EA_Period", "Site", "Transect", "Area_Surveyed", "Temp", "Visibility", "Weather", "Start_Depth", 
-    "End_Depth", "Organism",	"Isolates",	"Max_Length",	"Max_Width",	"Max_Height",	"Percent_Pale",	"Percent_Bleach",	
-    "OD", "Disease",	"Clump_L",	"Clump_P", "Clump_BL",	"Clump_NM",	"Clump_TM",	"Clump_OM",	"Clump_Other",
-    "Clump_Interval",	"Collector"
+    "Date", "EA_Period", "Site", "Transect", "Area_Surveyed", "Temp", "Visibility", "Weather", "Start_Depth",
+    "End_Depth", "Organism", "Isolates", "Max_Length", "Max_Width", "Max_Height", "Percent_Pale", "Percent_Bleach",
+    "OD", "Disease", "Clump_L", "Clump_P", "Clump_BL", "Clump_NM", "Clump_TM", "Clump_OM", "Clump_Other",
+    "Clump_Interval", "Collector"
 )
 columns_relief <- c(
-    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Max_Relief", "Collector" 
+    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Max_Relief", "Collector"
 )
 
 # Validate  Sites ---------------------------
