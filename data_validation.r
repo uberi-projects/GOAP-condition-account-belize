@@ -57,6 +57,36 @@ check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Pat
 # Validate  Surveys ---------------------------
 
 # Validate  Coral Community ---------------------------
+check_completeness(df_test_coral_community, columns_coral_community)
+check_date(df_test_coral_community$Date)
+check_grouping(df_test_coral_community$EA_Period, c("Opening", "Closing"))
+check_grouping(df_test_coral_community$Site, c(
+  "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
+  "SPR08", "SPR09"))
+check_range(df_test_coral_community$Transect, 1, 6, c("int"))
+check_range(df_test_coral_community$Area_Surveyed, 0, 10, c("int"))
+check_range(df_test_coral_community$Temp, 70, 90, c("numeric"))
+check_range(df_test_coral_community$Visibility, 1, 50, c("numeric"))
+check_grouping(df_test_coral_community$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
+check_range(df_test_coral_community$Start_Depth, 0, 65, c("numeric"))
+check_range(df_test_coral_community$End_Depth, 0, 65, c("numeric"))
+check_grouping(df_test_coral_community$Organism, df_test_coralspp$Code)
+check_range(df_test_coral_community$Isolates, 0, 30, c("int"))
+check_range(df_test_coral_community$Max_Length, 4, 200, c("int"))
+check_range(df_test_coral_community$Max_Width, 4, 200, c("int"))
+check_range(df_test_coral_community$Max_Height, 4, 200, c("int"))
+check_range(df_test_coral_community$Percent_Pale, 0, 100, c("int"))
+check_range(df_test_coral_community$Percent_Bleach, 0, 100, c("int"))
+check_range(df_test_coral_community$OD, 0, 100, c("int"))
+check_grouping(df_test_coral_community$Disease, df_test_disease$Code)
+check_range(df_test_coral_community$Clump_L, 0, 30, c("int"))
+check_range(df_test_coral_community$Clump_P, 0, 30, c("int"))
+check_range(df_test_coral_community$Clump_BL, 0, 30, c("int"))
+check_range(df_test_coral_community$Clump_NM, 0, 30, c("int"))
+check_range(df_test_coral_community$Clump_TM, 0, 30, c("int"))
+check_range(df_test_coral_community$Clump_OM, 0, 30, c("int"))
+check_range(df_test_coral_community$Clump_Other, 0, 30, c("int"))
+check_range(df_test_coral_community$Clump_Interval, 0, 30, c("int"))
 
 # Validate  Benthic Cover ---------------------------
 check_completeness(df_test_benthic_cover, columns_benthic_cover)
@@ -110,6 +140,7 @@ check_range(df_test_invertebrates$End_Depth, 0, 65, c("numeric"))
 check_range(df_test_invertebrates$Transect, 1, 6, c("int"))
 check_grouping(df_test_invertebrates$Species, c("Conch", "Lobster", "Adult Diadema", 
   "Juvenille Diadema", "Sea Cucumber", "Other Urchins"))
+check_range(df_test_invertebrates$Num, 0, 99, c("int"))
 
 # Validate  Fish (Relief) ---------------------------
 
