@@ -32,20 +32,24 @@ columns_coral_community <- c(
     "Clump_Other", "Clump_Interval", "Collector"
 )
 columns_relief <- c(
-    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Max_Relief", 
+    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Max_Relief",
     "Collector"
 )
 
 # Validate  Sites ---------------------------
 check_completeness(df_test_sites, columns_sites)
 check_grouping(df_test_sites$EAA_Code, c("EAA1", "EAA2", "EAA3", "EAA4", "EAA5"))
-check_grouping(df_test_sites$Site, c("SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07", "SPR08", 
-    "SPR09"))
+check_grouping(df_test_sites$Site, c(
+    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07", "SPR08",
+    "SPR09"
+))
 check_range(df_test_sites$Depth, 0, 65, type = c("numeric"))
 check_range(df_test_sites$Latitude, 16.100000, 18.200000, type = c("numeric"))
 check_range(df_test_sites$Longitutde, -87.450000, -88.700000, type = c("numeric"))
-check_grouping(df_test_sites$MPA_Management, c("None", "BCCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR",
-    "LBCMR", "SCMR", "PHMR", "HMCNM"))
+check_grouping(df_test_sites$MPA_Management, c(
+    "None", "BCCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR",
+    "LBCMR", "SCMR", "PHMR", "HMCNM"
+))
 check_grouping(df_test_sites$Protection_Status, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))
 check_grouping(df_test_sites$Reef_Zone, c("BR", "SFr", "DFR"))
 check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Patch"))
@@ -58,13 +62,15 @@ check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Pat
 check_completeness(df_test_benthic_cover, columns_benthic_cover)
 check_date(df_test_benthic_cover$Date)
 check_grouping(df_test_benthic_cover$EA_Period, c("Opening", "Closing"))
-check_grouping(df_test_benthic_cover$Site, c("SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-    "SPR08", "SPR09"))
+check_grouping(df_test_benthic_cover$Site, c(
+    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
+    "SPR08", "SPR09"
+))
 check_range(df_test_benthic_cover$Temp, 70, 90, c("numeric"))
 check_range(df_test_benthic_cover$Visibility, 1, 50, c("numeric"))
 check_grouping(df_test_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
 check_range(df_test_benthic_cover$Start_Depth, 0, 65, c("numeric"))
-check_range(df_test_benthic_cover$End_Depth, 0 , 65, c("numeric"))
+check_range(df_test_benthic_cover$End_Depth, 0, 65, c("numeric"))
 check_range(df_test_benthic_cover$Transect, 1, 6, c("numeric"))
 check_range(df_test_benthic_cover$Point, 0, 9.9, c("numeric"))
 check_grouping(df_test_benthic_cover$Organism, df_test_organisms$Code)
