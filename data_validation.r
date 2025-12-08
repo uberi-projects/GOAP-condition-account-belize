@@ -51,7 +51,7 @@ check_grouping(df_test_sites$MPA_Management, c(
     "LBCMR", "SCMR", "PHMR", "HMCNM"
 ))
 check_grouping(df_test_sites$Protection_Status, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))
-check_grouping(df_test_sites$Reef_Zone, c("BR", "SFr", "DFR"))
+check_grouping(df_test_sites$Reef_Zone, c("BR", "SFR", "DFR"))
 check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Patch"))
 
 # Validate  Surveys ---------------------------
@@ -64,21 +64,52 @@ check_date(df_test_benthic_cover$Date)
 check_grouping(df_test_benthic_cover$EA_Period, c("Opening", "Closing"))
 check_grouping(df_test_benthic_cover$Site, c(
     "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-    "SPR08", "SPR09"
-))
+    "SPR08", "SPR09"))
 check_range(df_test_benthic_cover$Temp, 70, 90, c("numeric"))
 check_range(df_test_benthic_cover$Visibility, 1, 50, c("numeric"))
 check_grouping(df_test_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
 check_range(df_test_benthic_cover$Start_Depth, 0, 65, c("numeric"))
 check_range(df_test_benthic_cover$End_Depth, 0, 65, c("numeric"))
-check_range(df_test_benthic_cover$Transect, 1, 6, c("numeric"))
+check_range(df_test_benthic_cover$Transect, 1, 6, c("int"))
 check_range(df_test_benthic_cover$Point, 0, 9.9, c("numeric"))
 check_grouping(df_test_benthic_cover$Organism, df_test_organisms$Code)
 check_grouping(df_test_benthic_cover$Secondary, df_test_organisms$Code)
 
 # Validate  Recruits ---------------------------
+check_completeness(df_test_recruits, columns_recruits)
+check_date(df_test_recruits$Date)
+check_grouping(df_test_recruits$EA_Period, c("Opening", "Closing"))
+check_grouping(df_test_recruits$Site, c(
+  "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
+  "SPR08", "SPR09"))
+check_range(df_test_recruits$Temp, 70, 90, c("numeric"))
+check_range(df_test_recruits$Visibility, 1, 50, c("numeric"))
+check_grouping(df_test_recruits$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
+check_range(df_test_recruits$Start_Depth, 0, 65, c("numeric"))
+check_range(df_test_recruits$End_Depth, 0, 65, c("numeric"))
+check_range(df_test_recruits$Transect, 1, 6, c("int"))
+check_range(df_test_recruits$Quadrat, 1, 5, c("int"))
+check_grouping(df_test_recruits$Primary_Substrate, df_test_substrate$Code)
+check_grouping(df_test_recruits$Secondary_Substrate, df_test_substrate$Code)
+check_grouping(df_test_recruits$Organism, df_test_organisms$Code)
+check_grouping(df_test_recruits$Size, c("SR", "LR"))
+check_range(df_test_recruits$Num, 0, 30, c("int"))
 
 # Validate  Invertebrates ---------------------------
+check_completeness(df_test_invertebrates, columns_recruits)
+check_date(df_test_invertebrates$Date)
+check_grouping(df_test_invertebrates$EA_Period, c("Opening", "Closing"))
+check_grouping(df_test_invertebrates$Site, c(
+  "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
+  "SPR08", "SPR09"))
+check_range(df_test_invertebrates$Temp, 70, 90, c("numeric"))
+check_range(df_test_invertebrates$Visibility, 1, 50, c("numeric"))
+check_grouping(df_test_invertebrates$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
+check_range(df_test_invertebrates$Start_Depth, 0, 65, c("numeric"))
+check_range(df_test_invertebrates$End_Depth, 0, 65, c("numeric"))
+check_range(df_test_invertebrates$Transect, 1, 6, c("int"))
+check_grouping(df_test_invertebrates$Species, c("Conch", "Lobster", "Adult Diadema", 
+  "Juvenille Diadema", "Sea Cucumber", "Other Urchins"))
 
 # Validate  Fish (Relief) ---------------------------
 
