@@ -6,9 +6,6 @@ source("helper_scripts/functions_define.r")
 source("data_restructuring.r")
 source("helper_scripts/data_test_load.r")
 
-# Initialize validation messages vector ---------------------------
-validation_msgs <- c()
-
 # Define vectors of required columns ---------------------------
 columns_sites <- c(
     "EAA_Code", "Site", "Depth", "Latitude", "Longitude", "MPA_Management", "Management_Zone",
@@ -37,22 +34,19 @@ columns_relief <- c(
 )
 
 # Validate  Sites ---------------------------
-check_completeness(df_test_sites, columns_sites)
-check_grouping(df_test_sites$EAA_Code, c("EAA1", "EAA2", "EAA3", "EAA4", "EAA5"))
-check_grouping(df_test_sites$Site, c(
-    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07", "SPR08",
-    "SPR09"
-))
-check_range(df_test_sites$Depth, 0, 65, type = c("numeric"))
-check_range(df_test_sites$Latitude, 16.100000, 18.200000, type = c("numeric"))
-check_range(df_test_sites$Longitutde, -87.450000, -88.700000, type = c("numeric"))
-check_grouping(df_test_sites$MPA_Management, c(
-    "None", "BCCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR",
-    "LBCMR", "SCMR", "PHMR", "HMCNM"
-))
-check_grouping(df_test_sites$Protection_Status, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))
-check_grouping(df_test_sites$Reef_Zone, c("BR", "SFR", "DFR"))
-check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Patch"))
+checks_sites <- list(
+    quote(check_completeness(df_test_sites, columns_sites)),
+    quote(check_grouping(df_test_sites$EAA_Code, c("EAA1", "EAA2", "EAA3", "EAA4", "EAA5"))),
+    quote(check_grouping(df_test_sites$Site, c("SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07", "SPR08", "SPR09"))),
+    quote(check_range(df_test_sites$Depth, 0, 65, type = "numeric")),
+    quote(check_range(df_test_sites$Latitude, 16.1, 18.2, type = "numeric")),
+    quote(check_range(df_test_sites$Longitude, -88.7, -87.45, type = "numeric")),
+    quote(check_grouping(df_test_sites$MPA_Management, c("None", "BCCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR", "LBCMR", "SCMR", "PHMR", "HMCNM"))),
+    quote(check_grouping(df_test_sites$Protection_Status, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))),
+    quote(check_grouping(df_test_sites$Reef_Zone, c("BR", "SFR", "DFR"))),
+    quote(check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Patch")))
+)
+validation_msgs_sites <- sapply(checks_sites, eval)
 
 # Validate  Surveys ---------------------------
 
@@ -61,8 +55,9 @@ check_completeness(df_test_coral_community, columns_coral_community)
 check_date(df_test_coral_community$Date)
 check_grouping(df_test_coral_community$EA_Period, c("Opening", "Closing"))
 check_grouping(df_test_coral_community$Site, c(
-  "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-  "SPR08", "SPR09"))
+    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
+    "SPR08", "SPR09"
+))
 check_range(df_test_coral_community$Transect, 1, 6, c("int"))
 check_range(df_test_coral_community$Area_Surveyed, 0, 10, c("int"))
 check_range(df_test_coral_community$Temp, 70, 90, c("numeric"))
@@ -94,7 +89,8 @@ check_date(df_test_benthic_cover$Date)
 check_grouping(df_test_benthic_cover$EA_Period, c("Opening", "Closing"))
 check_grouping(df_test_benthic_cover$Site, c(
     "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-    "SPR08", "SPR09"))
+    "SPR08", "SPR09"
+))
 check_range(df_test_benthic_cover$Temp, 70, 90, c("numeric"))
 check_range(df_test_benthic_cover$Visibility, 1, 50, c("numeric"))
 check_grouping(df_test_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
@@ -110,8 +106,9 @@ check_completeness(df_test_recruits, columns_recruits)
 check_date(df_test_recruits$Date)
 check_grouping(df_test_recruits$EA_Period, c("Opening", "Closing"))
 check_grouping(df_test_recruits$Site, c(
-  "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-  "SPR08", "SPR09"))
+    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
+    "SPR08", "SPR09"
+))
 check_range(df_test_recruits$Temp, 70, 90, c("numeric"))
 check_range(df_test_recruits$Visibility, 1, 50, c("numeric"))
 check_grouping(df_test_recruits$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
@@ -130,16 +127,19 @@ check_completeness(df_test_invertebrates, columns_recruits)
 check_date(df_test_invertebrates$Date)
 check_grouping(df_test_invertebrates$EA_Period, c("Opening", "Closing"))
 check_grouping(df_test_invertebrates$Site, c(
-  "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-  "SPR08", "SPR09"))
+    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
+    "SPR08", "SPR09"
+))
 check_range(df_test_invertebrates$Temp, 70, 90, c("numeric"))
 check_range(df_test_invertebrates$Visibility, 1, 50, c("numeric"))
 check_grouping(df_test_invertebrates$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
 check_range(df_test_invertebrates$Start_Depth, 0, 65, c("numeric"))
 check_range(df_test_invertebrates$End_Depth, 0, 65, c("numeric"))
 check_range(df_test_invertebrates$Transect, 1, 6, c("int"))
-check_grouping(df_test_invertebrates$Species, c("Conch", "Lobster", "Adult Diadema", 
-  "Juvenille Diadema", "Sea Cucumber", "Other Urchins"))
+check_grouping(df_test_invertebrates$Species, c(
+    "Conch", "Lobster", "Adult Diadema",
+    "Juvenille Diadema", "Sea Cucumber", "Other Urchins"
+))
 check_range(df_test_invertebrates$Num, 0, 99, c("int"))
 
 # Validate  Fish (Relief) ---------------------------
