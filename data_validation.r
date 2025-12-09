@@ -12,7 +12,7 @@ columns_sites <- c(
     "Protection_Status", "Reef_Zone", "Reef_Type"
 )
 columns_benthic_cover <- c(
-    "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Transect",
+    "Date", "EA_Period", "Site", "Time", "Temp", "Visibility", "Weather", "Start_Depth", "End_Depth", "Transect",
     "Point", "Organism", "Secondary", "Algae_Height", "Collector"
 )
 columns_recruits <- c(
@@ -23,7 +23,7 @@ columns_invertebrates <- c(
     "Date", "EA_Period", "Site", "Temp", "Visibility", "Weather", "Transect", "Species", "Num", "Collector"
 )
 columns_coral_community <- c(
-    "Date", "EA_Period", "Site", "Transect", "Area_Surveyed", "Temp", "Visibility", "Weather", "Start_Depth",
+    "Date", "EA_Period", "Site", "Time", "Transect", "Area_Surveyed", "Temp", "Visibility", "Weather", "Start_Depth",
     "End_Depth", "Organism", "Isolates", "Max_Length", "Max_Width", "Max_Height", "Percent_Pale",
     "Percent_Bleach", "OD", "Disease", "Clump_L", "Clump_P", "Clump_BL", "Clump_NM", "Clump_TM", "Clump_OM",
     "Clump_Other", "Clump_Interval", "Collector"
@@ -60,7 +60,7 @@ check_coral_community <- list(
     quote(check_date(df_test_coral_community$Date)),
     quote(check_grouping(df_test_coral_community$EA_Period, c("Opening", "Closing"))),
     quote(check_grouping(df_test_coral_community$Site, values_site_codes)),
-    quote(check_time(df_test_coral_community$Time, earliest_time = "6:00", latest_time = "18:00")),
+    quote(check_time(df_test_coral_community$Time, earliest_time = "06:00", latest_time = "18:00")),
     quote(check_range(df_test_coral_community$Transect, 1, 6, c("int"))),
     quote(check_range(df_test_coral_community$Area_Surveyed, 0, 10, c("int"))),
     quote(check_range(df_test_coral_community$Temp, 70, 90, c("numeric"))),
@@ -94,7 +94,7 @@ check_benthic_cover <- list(
     quote(check_date(df_test_benthic_cover$Date)),
     quote(check_grouping(df_test_benthic_cover$EA_Period, c("Opening", "Closing"))),
     quote(check_grouping(df_test_benthic_cover$Site, values_site_codes)),
-    quote(check_time(df_test_benthic_cover$Time, earliest_time = "6:00", latest_time = "18:00")),
+    quote(check_time(df_test_benthic_cover$Time, earliest_time = "06:00", latest_time = "18:00")),
     quote(check_range(df_test_benthic_cover$Temp, 70, 90, c("numeric"))),
     quote(check_range(df_test_benthic_cover$Visibility, 1, 50, c("numeric"))),
     quote(check_grouping(df_test_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
