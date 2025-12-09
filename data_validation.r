@@ -60,6 +60,7 @@ check_coral_community <- list(
     quote(check_date(df_test_coral_community$Date)),
     quote(check_grouping(df_test_coral_community$EA_Period, c("Opening", "Closing"))),
     quote(check_grouping(df_test_coral_community$Site, values_site_codes)),
+    quote(check_time(df_test_coral_community$Time, earliest_time = "6:00", latest_time = "18:00")),
     quote(check_range(df_test_coral_community$Transect, 1, 6, c("int"))),
     quote(check_range(df_test_coral_community$Area_Surveyed, 0, 10, c("int"))),
     quote(check_range(df_test_coral_community$Temp, 70, 90, c("numeric"))),
