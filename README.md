@@ -1,4 +1,4 @@
-# Belize Coral Condition Account - GOAP  <img src='www/images/UBERI_GOAP_Logo.png' align="right" height="50" style="margin-top:-7px;" />
+# Belize Coral Condition Account - GOAP  <img src='www/images/UBERI_GOAP_logo.png' align="right" height="50" style="margin-top:-7px;" />
 
 The purpose of this repository is to store the associated code for the Global Ocean Accounts Partnership in Belize for the coral condition account.
 
