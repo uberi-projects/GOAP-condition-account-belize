@@ -149,12 +149,11 @@ validation_msgs_invertebrates <- sapply(check_invertebrates, eval)
 
 # Validate  Fish (Relief) ---------------------------
 check_relief <- list(
-    quote(check_completeness(df_test_fish, columns_coral_community)),
+    quote(check_completeness(df_test_fish, columns_relief)),
     quote(check_date(df_test_fish$Date)),
     quote(check_grouping(df_test_fish$EA_Period, c("Opening", "Closing"))),
     quote(check_grouping(df_test_fish$Site, values_site_codes)),
-    quote(check_range(df_test_fish$Transect, 1, 6, c("int"))),
-    quote(check_range(df_test_fish$Area_Surveyed, 0, 10, c("int"))),
+    quote(check_range(df_test_fish$Transect, 1, 10, c("int"))),
     quote(check_range(df_test_fish$Temp, 70, 90, c("numeric"))),
     quote(check_range(df_test_fish$Visibility, 1, 50, c("numeric"))),
     quote(check_grouping(df_test_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
