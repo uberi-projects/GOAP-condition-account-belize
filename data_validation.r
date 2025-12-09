@@ -160,7 +160,8 @@ check_relief <- list(
     quote(check_grouping(df_test_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_test_fish$Start_Depth, 0, 65, c("numeric"))),
     quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric"))),
-    quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric")))
+    quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_fish$Max_Relief, 0, 99, c("int")))
 )
 validation_msgs_fish <- sapply(check_relief, eval)
 
