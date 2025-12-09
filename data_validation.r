@@ -85,7 +85,7 @@ check_coral_community <- list(
     quote(check_range(df_test_coral_community$Clump_Other, 0, 30, c("int"))),
     quote(check_range(df_test_coral_community$Clump_Interval, 0, 30, c("int")))
 )
-validation_msgs_coral <- sapply(check_coral_community, eval)   
+validation_msgs_coral <- sapply(check_coral_community, eval)
 
 # Validate  Benthic Cover ---------------------------
 check_benthic_cover <- list(
@@ -148,20 +148,36 @@ validation_msgs_invertebrates <- sapply(check_invertebrates, eval)
 
 # Validate  Fish (Relief) ---------------------------
 check_relief <- list(
-  quote(check_completeness(df_test_fish, columns_coral_community)),
-  quote(check_date(df_test_fish$Date)),
-  quote(check_grouping(df_test_fish$EA_Period, c("Opening", "Closing"))),
-  quote(check_grouping(df_test_fish$Site, values_site_codes)),
-  quote(check_range(df_test_fish$Transect, 1, 6, c("int"))),
-  quote(check_range(df_test_fish$Area_Surveyed, 0, 10, c("int"))),
-  quote(check_range(df_test_fish$Temp, 70, 90, c("numeric"))),
-  quote(check_range(df_test_fish$Visibility, 1, 50, c("numeric"))),
-  quote(check_grouping(df_test_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
-  quote(check_range(df_test_fish$Start_Depth, 0, 65, c("numeric"))),
-  quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric"))),
-  quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric")))
+    quote(check_completeness(df_test_fish, columns_coral_community)),
+    quote(check_date(df_test_fish$Date)),
+    quote(check_grouping(df_test_fish$EA_Period, c("Opening", "Closing"))),
+    quote(check_grouping(df_test_fish$Site, values_site_codes)),
+    quote(check_range(df_test_fish$Transect, 1, 6, c("int"))),
+    quote(check_range(df_test_fish$Area_Surveyed, 0, 10, c("int"))),
+    quote(check_range(df_test_fish$Temp, 70, 90, c("numeric"))),
+    quote(check_range(df_test_fish$Visibility, 1, 50, c("numeric"))),
+    quote(check_grouping(df_test_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
+    quote(check_range(df_test_fish$Start_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric")))
 )
 validation_msgs_fish <- sapply(check_relief, eval)
 
 # Print validation messages to text file ---------------------------
-writeLines(validation_msgs, "validation_report.txt")
+validation_msgs_sections <- list(
+    "Sites" = validation_msgs_sites,
+    "Coral Community" = validation_msgs_coral,
+    "Benthic Cover" = validation_msgs_benthic,
+    "Recruits" = validation_msgs_recruits,
+    "Invertebrates" = validation_msgs_invertebrates,
+    "Fish (Relief)" = validation_msgs_fish
+)
+validation_msgs <- c("==== Validation Report ====", "")
+for (section_name in names(validation_msgs_sections)) {
+    validation_msgs <- c(
+        validation_msgs,
+        paste0("==== ", section_name, " Validation ===="),
+        validation_msgs_sections[[section_name]], ""
+    )
+}
+writeLines(validation_msgs, "outputs/validation_report.txt")

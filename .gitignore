@@ -2,6 +2,10 @@
 /data_deposit/*
 !/data_deposit/.gitkeep
 
+# Output files
+/outputs/*
+!/outputs/.gitkeep
+
 # History files
 .Rhistory
 .Rapp.history
