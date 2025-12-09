@@ -35,7 +35,7 @@ columns_relief <- c(
 
 # Define allowable values for columns ---------------------------
 values_site_codes <- paste0("SPR", sprintf("%02d", 1:9))
-values_mpa_names <- c("None", "BCCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR", "LBCMR", "SCMR", "PHMR", "HMCNM")
+values_mpa_names <- c("None", "BCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR", "LBCMR", "SCMR", "PHMR", "HMCNM")
 
 # Validate  Sites ---------------------------
 checks_sites <- list(
@@ -48,105 +48,120 @@ checks_sites <- list(
     quote(check_grouping(df_test_sites$MPA_Management, values_mpa_names)),
     quote(check_grouping(df_test_sites$Protection_Status, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))),
     quote(check_grouping(df_test_sites$Reef_Zone, c("BR", "SFR", "DFR"))),
-    quote(check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Patch")))
+    quote(check_grouping(df_test_sites$Reef_Type, c("Fringing", "Barrier", "Atoll", "Patch")))
 )
 validation_msgs_sites <- sapply(checks_sites, eval)
 
 # Validate  Surveys ---------------------------
 
 # Validate  Coral Community ---------------------------
-check_completeness(df_test_coral_community, columns_coral_community)
-check_date(df_test_coral_community$Date)
-check_grouping(df_test_coral_community$EA_Period, c("Opening", "Closing"))
-check_grouping(df_test_coral_community$Site, c(
-    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-    "SPR08", "SPR09"
-))
-check_range(df_test_coral_community$Transect, 1, 6, c("int"))
-check_range(df_test_coral_community$Area_Surveyed, 0, 10, c("int"))
-check_range(df_test_coral_community$Temp, 70, 90, c("numeric"))
-check_range(df_test_coral_community$Visibility, 1, 50, c("numeric"))
-check_grouping(df_test_coral_community$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
-check_range(df_test_coral_community$Start_Depth, 0, 65, c("numeric"))
-check_range(df_test_coral_community$End_Depth, 0, 65, c("numeric"))
-check_grouping(df_test_coral_community$Organism, df_test_coralspp$Code)
-check_range(df_test_coral_community$Isolates, 0, 30, c("int"))
-check_range(df_test_coral_community$Max_Length, 4, 200, c("int"))
-check_range(df_test_coral_community$Max_Width, 4, 200, c("int"))
-check_range(df_test_coral_community$Max_Height, 4, 200, c("int"))
-check_range(df_test_coral_community$Percent_Pale, 0, 100, c("int"))
-check_range(df_test_coral_community$Percent_Bleach, 0, 100, c("int"))
-check_range(df_test_coral_community$OD, 0, 100, c("int"))
-check_grouping(df_test_coral_community$Disease, df_test_disease$Code)
-check_range(df_test_coral_community$Clump_L, 0, 30, c("int"))
-check_range(df_test_coral_community$Clump_P, 0, 30, c("int"))
-check_range(df_test_coral_community$Clump_BL, 0, 30, c("int"))
-check_range(df_test_coral_community$Clump_NM, 0, 30, c("int"))
-check_range(df_test_coral_community$Clump_TM, 0, 30, c("int"))
-check_range(df_test_coral_community$Clump_OM, 0, 30, c("int"))
-check_range(df_test_coral_community$Clump_Other, 0, 30, c("int"))
-check_range(df_test_coral_community$Clump_Interval, 0, 30, c("int"))
+check_coral_community <- list(
+    quote(check_completeness(df_test_coral_community, columns_coral_community)),
+    quote(check_date(df_test_coral_community$Date)),
+    quote(check_grouping(df_test_coral_community$EA_Period, c("Opening", "Closing"))),
+    quote(check_grouping(df_test_coral_community$Site, values_site_codes)),
+    quote(check_range(df_test_coral_community$Transect, 1, 6, c("int"))),
+    quote(check_range(df_test_coral_community$Area_Surveyed, 0, 10, c("int"))),
+    quote(check_range(df_test_coral_community$Temp, 70, 90, c("numeric"))),
+    quote(check_range(df_test_coral_community$Visibility, 1, 50, c("numeric"))),
+    quote(check_grouping(df_test_coral_community$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
+    quote(check_range(df_test_coral_community$Start_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_coral_community$End_Depth, 0, 65, c("numeric"))),
+    quote(check_grouping(df_test_coral_community$Organism, df_test_coralspp$Code)),
+    quote(check_range(df_test_coral_community$Isolates, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Max_Length, 4, 200, c("int"))),
+    quote(check_range(df_test_coral_community$Max_Width, 4, 200, c("int"))),
+    quote(check_range(df_test_coral_community$Max_Height, 4, 200, c("int"))),
+    quote(check_range(df_test_coral_community$Percent_Pale, 0, 100, c("int"))),
+    quote(check_range(df_test_coral_community$Percent_Bleach, 0, 100, c("int"))),
+    quote(check_range(df_test_coral_community$OD, 0, 100, c("int"))),
+    quote(check_grouping(df_test_coral_community$Disease, df_test_disease$Code)),
+    quote(check_range(df_test_coral_community$Clump_L, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Clump_P, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Clump_BL, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Clump_NM, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Clump_TM, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Clump_OM, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Clump_Other, 0, 30, c("int"))),
+    quote(check_range(df_test_coral_community$Clump_Interval, 0, 30, c("int")))
+)
+validation_msgs_coral <- sapply(check_coral_community, eval)   
 
 # Validate  Benthic Cover ---------------------------
-check_completeness(df_test_benthic_cover, columns_benthic_cover)
-check_date(df_test_benthic_cover$Date)
-check_grouping(df_test_benthic_cover$EA_Period, c("Opening", "Closing"))
-check_grouping(df_test_benthic_cover$Site, c(
-    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-    "SPR08", "SPR09"
-))
-check_range(df_test_benthic_cover$Temp, 70, 90, c("numeric"))
-check_range(df_test_benthic_cover$Visibility, 1, 50, c("numeric"))
-check_grouping(df_test_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
-check_range(df_test_benthic_cover$Start_Depth, 0, 65, c("numeric"))
-check_range(df_test_benthic_cover$End_Depth, 0, 65, c("numeric"))
-check_range(df_test_benthic_cover$Transect, 1, 6, c("int"))
-check_range(df_test_benthic_cover$Point, 0, 9.9, c("numeric"))
-check_grouping(df_test_benthic_cover$Organism, df_test_organisms$Code)
-check_grouping(df_test_benthic_cover$Secondary, df_test_organisms$Code)
+check_benthic_cover <- list(
+    quote(check_completeness(df_test_benthic_cover, columns_benthic_cover)),
+    quote(check_date(df_test_benthic_cover$Date)),
+    quote(check_grouping(df_test_benthic_cover$EA_Period, c("Opening", "Closing"))),
+    quote(check_grouping(df_test_benthic_cover$Site, values_site_codes)),
+    quote(check_range(df_test_benthic_cover$Temp, 70, 90, c("numeric"))),
+    quote(check_range(df_test_benthic_cover$Visibility, 1, 50, c("numeric"))),
+    quote(check_grouping(df_test_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
+    quote(check_range(df_test_benthic_cover$Start_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_benthic_cover$End_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_benthic_cover$Transect, 1, 6, c("int"))),
+    quote(check_range(df_test_benthic_cover$Point, 0, 9.9, c("numeric"))),
+    quote(check_grouping(df_test_benthic_cover$Organism, df_test_organisms$Code)),
+    quote(check_grouping(df_test_benthic_cover$Secondary, df_test_organisms$Code))
+)
+validation_msgs_benthic <- sapply(check_benthic_cover, eval)
 
 # Validate  Recruits ---------------------------
-check_completeness(df_test_recruits, columns_recruits)
-check_date(df_test_recruits$Date)
-check_grouping(df_test_recruits$EA_Period, c("Opening", "Closing"))
-check_grouping(df_test_recruits$Site, c(
-    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-    "SPR08", "SPR09"
-))
-check_range(df_test_recruits$Temp, 70, 90, c("numeric"))
-check_range(df_test_recruits$Visibility, 1, 50, c("numeric"))
-check_grouping(df_test_recruits$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
-check_range(df_test_recruits$Start_Depth, 0, 65, c("numeric"))
-check_range(df_test_recruits$End_Depth, 0, 65, c("numeric"))
-check_range(df_test_recruits$Transect, 1, 6, c("int"))
-check_range(df_test_recruits$Quadrat, 1, 5, c("int"))
-check_grouping(df_test_recruits$Primary_Substrate, df_test_substrate$Code)
-check_grouping(df_test_recruits$Secondary_Substrate, df_test_substrate$Code)
-check_grouping(df_test_recruits$Organism, df_test_organisms$Code)
-check_grouping(df_test_recruits$Size, c("SR", "LR"))
-check_range(df_test_recruits$Num, 0, 30, c("int"))
+check_recruits <- list(
+    quote(check_completeness(df_test_recruits, columns_recruits)),
+    quote(check_date(df_test_recruits$Date)),
+    quote(check_grouping(df_test_recruits$EA_Period, c("Opening", "Closing"))),
+    quote(check_grouping(df_test_recruits$Site, values_site_codes)),
+    quote(check_range(df_test_recruits$Temp, 70, 90, c("numeric"))),
+    quote(check_range(df_test_recruits$Visibility, 1, 50, c("numeric"))),
+    quote(check_grouping(df_test_recruits$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
+    quote(check_range(df_test_recruits$Start_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_recruits$End_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_recruits$Transect, 1, 6, c("int"))),
+    quote(check_range(df_test_recruits$Quadrat, 1, 5, c("int"))),
+    quote(check_grouping(df_test_recruits$Primary_Substrate, df_test_substrate$Code)),
+    quote(check_grouping(df_test_recruits$Secondary_Substrate, df_test_substrate$Code)),
+    quote(check_grouping(df_test_recruits$Organism, df_test_organisms$Code)),
+    quote(check_grouping(df_test_recruits$Size, c("SR", "LR"))),
+    quote(check_range(df_test_recruits$Num, 0, 30, c("int")))
+)
+validation_msgs_recruits <- sapply(check_recruits, eval)
 
 # Validate  Invertebrates ---------------------------
-check_completeness(df_test_invertebrates, columns_recruits)
-check_date(df_test_invertebrates$Date)
-check_grouping(df_test_invertebrates$EA_Period, c("Opening", "Closing"))
-check_grouping(df_test_invertebrates$Site, c(
-    "SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07",
-    "SPR08", "SPR09"
-))
-check_range(df_test_invertebrates$Temp, 70, 90, c("numeric"))
-check_range(df_test_invertebrates$Visibility, 1, 50, c("numeric"))
-check_grouping(df_test_invertebrates$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))
-check_range(df_test_invertebrates$Start_Depth, 0, 65, c("numeric"))
-check_range(df_test_invertebrates$End_Depth, 0, 65, c("numeric"))
-check_range(df_test_invertebrates$Transect, 1, 6, c("int"))
-check_grouping(df_test_invertebrates$Species, c(
-    "Conch", "Lobster", "Adult Diadema",
-    "Juvenille Diadema", "Sea Cucumber", "Other Urchins"
-))
-check_range(df_test_invertebrates$Num, 0, 99, c("int"))
+check_invertebrates <- list(
+    quote(check_completeness(df_test_invertebrates, columns_invertebrates)),
+    quote(check_date(df_test_invertebrates$Date)),
+    quote(check_grouping(df_test_invertebrates$EA_Period, c("Opening", "Closing"))),
+    quote(check_grouping(df_test_invertebrates$Site, values_site_codes)),
+    quote(check_range(df_test_invertebrates$Temp, 70, 90, c("numeric"))),
+    quote(check_range(df_test_invertebrates$Visibility, 1, 50, c("numeric"))),
+    quote(check_grouping(df_test_invertebrates$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
+    quote(check_range(df_test_invertebrates$Start_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_invertebrates$End_Depth, 0, 65, c("numeric"))),
+    quote(check_range(df_test_invertebrates$Transect, 1, 6, c("int"))),
+    quote(check_grouping(df_test_invertebrates$Species, c(
+        "Conch", "Lobster", "Adult Diadema",
+        "Juvenille Diadema", "Sea Cucumber", "Other Urchins"
+    ))),
+    quote(check_range(df_test_invertebrates$Num, 0, 99, c("int")))
+)
+validation_msgs_invertebrates <- sapply(check_invertebrates, eval)
 
 # Validate  Fish (Relief) ---------------------------
+check_relief <- list(
+  quote(check_completeness(df_test_fish, columns_coral_community)),
+  quote(check_date(df_test_fish$Date)),
+  quote(check_grouping(df_test_fish$EA_Period, c("Opening", "Closing"))),
+  quote(check_grouping(df_test_fish$Site, values_site_codes)),
+  quote(check_range(df_test_fish$Transect, 1, 6, c("int"))),
+  quote(check_range(df_test_fish$Area_Surveyed, 0, 10, c("int"))),
+  quote(check_range(df_test_fish$Temp, 70, 90, c("numeric"))),
+  quote(check_range(df_test_fish$Visibility, 1, 50, c("numeric"))),
+  quote(check_grouping(df_test_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
+  quote(check_range(df_test_fish$Start_Depth, 0, 65, c("numeric"))),
+  quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric"))),
+  quote(check_range(df_test_fish$End_Depth, 0, 65, c("numeric")))
+)
+validation_msgs_fish <- sapply(check_relief, eval)
 
 # Print validation messages to text file ---------------------------
 writeLines(validation_msgs, "validation_report.txt")
