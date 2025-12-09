@@ -93,6 +93,7 @@ check_benthic_cover <- list(
     quote(check_date(df_test_benthic_cover$Date)),
     quote(check_grouping(df_test_benthic_cover$EA_Period, c("Opening", "Closing"))),
     quote(check_grouping(df_test_benthic_cover$Site, values_site_codes)),
+    quote(check_time(df_test_benthic_cover$Time, earliest_time = "6:00", latest_time = "18:00")),
     quote(check_range(df_test_benthic_cover$Temp, 70, 90, c("numeric"))),
     quote(check_range(df_test_benthic_cover$Visibility, 1, 50, c("numeric"))),
     quote(check_grouping(df_test_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
