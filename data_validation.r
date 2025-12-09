@@ -33,15 +33,19 @@ columns_relief <- c(
     "Collector"
 )
 
+# Define allowable values for columns ---------------------------
+values_site_codes <- paste0("SPR", sprintf("%02d", 1:9))
+values_mpa_names <- c("None", "BCCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR", "LBCMR", "SCMR", "PHMR", "HMCNM")
+
 # Validate  Sites ---------------------------
 checks_sites <- list(
     quote(check_completeness(df_test_sites, columns_sites)),
     quote(check_grouping(df_test_sites$EAA_Code, c("EAA1", "EAA2", "EAA3", "EAA4", "EAA5"))),
-    quote(check_grouping(df_test_sites$Site, c("SPR01", "SPR02", "SPR03", "SPR04", "SPR05", "SPR06", "SPR07", "SPR08", "SPR09"))),
+    quote(check_grouping(df_test_sites$Site, values_site_codes)),
     quote(check_range(df_test_sites$Depth, 0, 65, type = "numeric")),
     quote(check_range(df_test_sites$Latitude, 16.1, 18.2, type = "numeric")),
     quote(check_range(df_test_sites$Longitude, -88.7, -87.45, type = "numeric")),
-    quote(check_grouping(df_test_sites$MPA_Management, c("None", "BCCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR", "LBCMR", "SCMR", "PHMR", "HMCNM"))),
+    quote(check_grouping(df_test_sites$MPA_Management, values_mpa_names)),
     quote(check_grouping(df_test_sites$Protection_Status, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))),
     quote(check_grouping(df_test_sites$Reef_Zone, c("BR", "SFR", "DFR"))),
     quote(check_grouping(df_test_sites$`Reef Type`, c("Fringing", "Barrier", "Atoll", "Patch")))
