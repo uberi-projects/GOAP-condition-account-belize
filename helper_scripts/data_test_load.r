@@ -13,7 +13,7 @@ df_test_substrate <- read_excel("data_dummy/Dummy_data_OA_Benthic Data Template.
 df_test_coral_community <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = 6, na = "NA")
 df_test_coralspp <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = 3, na = "NA")
 df_test_disease <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = 2, na = "NA")
-df_test_fish <- read_excel("data_dummy/Dummy_data_OA_Relief Data Template.xlsx", sheet = 3, na = "NA")
+df_test_fish <- read_excel("data_dummy/Dummy_data_OA_Relief Data Template.xlsx", sheet = 4, na = "NA")
 
 ## Ensure time columns are properly formatted
 df_test_benthic_cover$Time <- format(df_test_benthic_cover$Time, "%H:%M")
