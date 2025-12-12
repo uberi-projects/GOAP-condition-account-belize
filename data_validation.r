@@ -46,7 +46,7 @@ checks_sites <- list(
     quote(check_range(df_test_sites$Latitude, 16.1, 18.2, type = "numeric")),
     quote(check_range(df_test_sites$Longitude, -88.7, -87.45, type = "numeric")),
     quote(check_grouping(df_test_sites$MPA_Management, values_mpa_names)),
-    quote(check_grouping(df_test_sites$Protection_Status, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))),
+    quote(check_grouping(df_test_sites$Management_Zone, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))),
     quote(check_grouping(df_test_sites$Reef_Zone, c("BR", "SFR", "DFR"))),
     quote(check_grouping(df_test_sites$Reef_Type, c("Fringing", "Barrier", "Atoll", "Patch")))
 )
