@@ -9,3 +9,17 @@ indicator_mac_include <- TRUE # macroalgae cover
 indicator_red_include <- TRUE # recruit density
 indicator_lcd_include <- TRUE # live coral diversity
 indicator_rug_include <- TRUE # rugosity
+
+# Calculate live coral cover ---------------------------
+
+
+# Calculate macroalgae cover ---------------------------
+
+
+# Calculate recruit density ---------------------------
+
+
+# Calculate live coral diversity ---------------------------
+
+
+# Calculate rugosity ---------------------------
