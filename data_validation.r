@@ -137,7 +137,7 @@ check_recruits <- list(
     quote(check_range(df_recruits$Quadrat, 1, 5, c("int"))),
     quote(check_grouping(df_recruits$Primary_Substrate, df_substrate$Code)),
     quote(check_grouping(df_recruits$Secondary_Substrate, df_substrate$Code)),
-    quote(check_grouping(df_recruits$Organism, df_organisms$Code)),
+    quote(check_grouping(df_recruits$Organism, df_coralspp$ID)),
     quote(check_grouping(df_recruits$Size, c("SR", "LR"))),
     quote(check_range(df_recruits$Num, 0, 30, c("int")))
 )

@@ -55,11 +55,11 @@ df_recruits <- df_recruits_preliminary %>%
     left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
     left_join(df_quadrats, by = c("Transect", "Quadrat Index")) %>%
-    left_join(df_organisms_preliminary %>% rename(Taxonomy = ID), by = "Taxonomy") %>%
+    left_join(df_coralspp %>% rename(Taxonomy = ID), by = "Taxonomy") %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = paste(Code, Name.y),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index`,
-        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Name,
+        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Taxonomy,
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
