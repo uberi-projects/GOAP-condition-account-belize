@@ -7,8 +7,8 @@ filepath_fish <- file.path("data_deposit", "FishRaw.xlsx")
 filepath_metadata <- file.path("data_deposit", "Metadata.xlsx")
 df_benthic_transects <- read_excel(filepath_benthic, sheet = 3, skip = 1)
 df_benthic_cover_preliminary <- read_excel(filepath_benthic, sheet = 4, skip = 1)
-df_invertebrates <- read_excel(filepath_benthic, sheet = 5, skip = 1)
-df_recruits <- read_excel(filepath_benthic, sheet = 6, skip = 1)
+df_quadrats <- read_excel(filepath_benthic, sheet = 5, skip = 1)
+df_recruits_preliminary <- read_excel(filepath_benthic, sheet = 6, skip = 1)
 df_coral_community_transects <- read_excel(filepath_coral, sheet = 3)
 df_coral_community <- read_excel(filepath_coral, sheet = 4, skip = 3)
 df_coral_community_diseases <- read_excel(filepath_coral, sheet = 5)
@@ -46,6 +46,23 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
     select(
         Date, EA_Period, Site, Time, Temp, Visibility, Weather, Start_Depth, End_Depth, Transect,
         Point, Organism, Secondary, Algae_Height, Collector, Notes
+    )
+df_recruits <- df_recruits_preliminary %>%
+    left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
+    left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
+    left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
+    left_join(df_quadrats, by = c("Transect", "Quadrat Index")) %>%
+    left_join(df_organisms_preliminary %>% rename(Taxonomy = ID), by = "Taxonomy") %>%
+    mutate(
+        Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = paste(Code, Name.y),
+        Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index`,
+        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Name,
+        LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
+    ) %>%
+    pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
+    select(
+        Date, EA_Period, Site, Temp, Visibility, Weather, Transect, Quadrat, Primary_Substrate,
+        Secondary_Substrate, Organism, Size, Num, Collector, Notes
     )
 df_organisms <- df_organisms_preliminary %>%
     left_join(df_coralspp, by = "ID") %>%
