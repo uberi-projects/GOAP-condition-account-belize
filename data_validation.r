@@ -7,7 +7,7 @@ source("data_restructuring.r")
 source("helper_scripts/data_test_load.r")
 
 # Set boolean for whether test data or AGRRA data should be used ---------------------------
-test_on <- TRUE
+test_on <- FALSE
 if (test_on == TRUE) {
     df_sites <- df_test_sites
     df_benthic_cover <- df_test_benthic_cover

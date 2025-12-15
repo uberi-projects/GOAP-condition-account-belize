@@ -3,14 +3,17 @@
 # Source scripts ---------------------------
 source("data_validation.r")
 
+# Set vectors ---------------------------
+coral_category <- ifelse(test_on == TRUE, "Coral", "Calcifiers :: Coral")
+
 # Prepare data ---------------------------
 df_organisms_unique <- df_organisms %>% distinct(Code, Type)
 benthic_cover_presence <- df_benthic_cover %>%
     left_join(df_organisms_unique %>% select(Code, Primary_Type = Type), by = c("Organism" = "Code")) %>%
     left_join(df_organisms_unique %>% select(Code, Secondary_Type = Type), by = c("Secondary" = "Code")) %>%
     mutate(
-        Coral_Presence = Vectorize(calculate_type_weight)(Primary_Type, Secondary_Type, "Coral"),
-        Year = format(Date, format = "%Y")
+        Coral_Presence = Vectorize(calculate_type_weight)(Primary_Type, Secondary_Type, coral_category),
+        Year = format(as.Date(Date), format = "%Y")
     )
 
 # Calculate live coral cover ---------------------------
