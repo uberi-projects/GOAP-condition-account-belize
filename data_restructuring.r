@@ -14,7 +14,7 @@ df_coral_community <- read_excel(filepath_coral, sheet = 4, skip = 3)
 df_coral_community_diseases <- read_excel(filepath_coral, sheet = 5)
 df_coral_community_counts <- read_excel(filepath_coral, sheet = 6)
 df_fish <- read_excel(filepath_fish, sheet = 3, skip = 1)
-df_organisms <- read_excel(filepath_metadata, sheet = 6)
+df_organisms_preliminary <- read_excel(filepath_metadata, sheet = 6)
 df_organisms_group <- read_excel(filepath_metadata, sheet = 5)
 df_coralspp <- read_excel(filepath_metadata, sheet = 7)
 df_transects <- read_excel(filepath_metadata, sheet = 4)
@@ -47,5 +47,8 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         Date, EA_Period, Site, Time, Temp, Visibility, Weather, Start_Depth, End_Depth, Transect,
         Point, Organism, Secondary, Algae_Height, Collector, Notes
     )
-
-# Prepare formatted data for data validation ---------------------------
+df_organisms <- df_organisms_preliminary %>%
+    left_join(df_coralspp, by = "ID") %>%
+    left_join(df_organisms_group %>% rename(Category = ID), by = "Category") %>%
+    mutate(Code = ID, `Scientific Name` = paste(Genus, Species), Type = Name) %>%
+    select(Code, `Scientific Name`, Type)
