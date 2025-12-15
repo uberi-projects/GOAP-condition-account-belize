@@ -19,6 +19,9 @@ if (test_on == TRUE) {
     df_coralspp <- df_test_coralspp
     df_disease <- df_test_disease
     df_fish <- df_test_fish
+} else {
+    df_substrate <- df_test_substrate
+    df_disease <- df_test_disease
 }
 
 # Define vectors of required columns ---------------------------

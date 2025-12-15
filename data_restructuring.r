@@ -19,8 +19,6 @@ df_organisms_group <- read_excel(filepath_metadata, sheet = 5)
 df_coralspp <- read_excel(filepath_metadata, sheet = 7)
 df_transects <- read_excel(filepath_metadata, sheet = 4)
 df_surveys <- read_excel(filepath_metadata, sheet = 3)
-# df_substrate - not present in AGRRA export
-# df_disease - not present in AGRRA export
 
 # Covert AGRRA formatted data to GOAP formatted data ---------------------------
 df_sites <- df_surveys %>%
