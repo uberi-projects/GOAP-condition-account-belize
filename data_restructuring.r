@@ -43,7 +43,7 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         EA_Period = NA, Date = format(Surveyed, format = "%Y-%m-%d"), Organism = Primary,
         Site = paste(Code, Name.y), Time = format(Surveyed, format = "%H:%M"),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = `Depth (m)`,
-        End_Depth = `Depth (m)`, Point = `Point Index`, Organism = Primary,
+        End_Depth = `Depth (m)`, Point = `Point Index`/10, Organism = Primary,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
     ) %>%
     select(
