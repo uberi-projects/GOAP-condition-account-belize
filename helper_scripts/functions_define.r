@@ -3,6 +3,19 @@
 # Initialize functions list ---------------------------
 list_functions <- list()
 
+# Define function to assign partial weight for secondary benthic observations ---------------------------
+calculate_type_weight <- function(primary, secondary, type) {
+    if (!is.na(primary) && !is.na(secondary) && primary == type && secondary == type) {
+        return(1)
+    } else if (!is.na(primary) && primary == type && is.na(secondary)) {
+        return(1)
+    } else if ((!is.na(primary) && primary == type) || (!is.na(secondary) && secondary == type)) {
+        return(0.5)
+    } else {
+        return(0)
+    }
+}
+
 # Check a dataframe for presence of required columns ---------------------------
 #- df : The dataframe to check
 #- required_columns : The vector of required columns
@@ -22,6 +35,9 @@ list_functions$check_completeness <- check_completeness
 #- grouping_vector : The column or vector of allowable values
 check_grouping <- function(grouping_col, grouping_vector) {
     col_name <- deparse(substitute(grouping_col))
+    if (is.null(grouping_col) || length(grouping_col) == 0) {
+        return(paste0(col_name, " does not exist or is empty."))
+    }
     na_count <- sum(is.na(grouping_col))
     valid <- is.na(grouping_col) | grouping_col %in% grouping_vector
     invalid <- unique(grouping_col[!valid & !is.na(grouping_col)])
@@ -45,6 +61,9 @@ list_functions$check_grouping <- check_grouping
 #- type : Either "int" for integer ranges or "numeric" for continuous ranges
 check_range <- function(range_col, range_lower, range_upper, type = c("numeric", "int")) {
     col_name <- deparse(substitute(range_col))
+    if (is.null(range_col) || length(range_col) == 0) {
+        return(paste0(col_name, " does not exist or is empty."))
+    }
     type <- match.arg(type)
     num_col <- as.numeric(range_col)
     na_count <- sum(is.na(num_col))
@@ -71,6 +90,9 @@ list_functions$check_range <- check_range
 #- date_col : The column or vector to check
 check_date <- function(date_col) {
     col_name <- deparse(substitute(date_col))
+    if (is.null(date_col) || length(date_col) == 0) {
+        return(paste0(col_name, " does not exist or is empty."))
+    }
     na_count <- sum(is.na(date_col))
     valid <- is.na(date_col) | (grepl("^\\d{4}-\\d{2}-\\d{2}$", date_col) & !is.na(as.Date(date_col, format = "%Y-%m-%d")))
     invalid <- unique(date_col[!valid & !is.na(date_col)])
@@ -93,6 +115,9 @@ list_functions$check_date <- check_date
 #- latest_time : A string of the latest 24hr HH:MM time allowable
 check_time <- function(time_col, earliest_time = "06:00", latest_time = "18:00") {
     col_name <- deparse(substitute(time_col))
+    if (is.null(time_col) || length(time_col) == 0) {
+        return(paste0(col_name, " does not exist or is empty."))
+    }
     na_count <- sum(is.na(time_col))
     time_col_parsed <- strptime(time_col, format = "%H:%M")
     is_time <- !is.na(time_col_parsed)
