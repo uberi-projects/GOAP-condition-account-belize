@@ -1,5 +1,10 @@
 # data_restructuring.r
 
+# Source scripts ---------------------------
+source("helper_scripts/packages_load.r")
+source("helper_scripts/functions_define.r")
+source("helper_scripts/data_test_load.r")
+
 # Read AGRRA data as exported from AGRRA platform ---------------------------
 filepath_benthic <- file.path("data_deposit", "BenthicRaw.xlsx")
 filepath_coral <- file.path("data_deposit", "CoralRaw.xlsx")

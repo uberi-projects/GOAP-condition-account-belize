@@ -1,10 +1,7 @@
 # data_validation.r
 
 # Source scripts ---------------------------
-source("helper_scripts/packages_load.r")
-source("helper_scripts/functions_define.r")
 source("data_restructuring.r")
-source("helper_scripts/data_test_load.r")
 
 # Set boolean for whether test data or AGRRA data should be used ---------------------------
 test_on <- FALSE
