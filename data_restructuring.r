@@ -14,7 +14,6 @@ df_coral_community <- read_excel(filepath_coral, sheet = 4, skip = 3)
 df_coral_community_diseases <- read_excel(filepath_coral, sheet = 5)
 df_coral_community_counts <- read_excel(filepath_coral, sheet = 6)
 df_fish <- read_excel(filepath_fish, sheet = 3, skip = 1)
-df_sites <- read_excel(filepath_metadata, sheet = 3)
 df_organisms <- read_excel(filepath_metadata, sheet = 6)
 df_organisms_group <- read_excel(filepath_metadata, sheet = 5)
 df_coralspp <- read_excel(filepath_metadata, sheet = 7)
@@ -24,6 +23,15 @@ df_surveys <- read_excel(filepath_metadata, sheet = 3)
 # df_disease - not present in AGRRA export
 
 # Covert AGRRA formatted data to GOAP formatted data ---------------------------
+df_sites <- df_surveys %>%
+    mutate(
+        EAA_Code = NA, Site = paste(Code, Name), Depth = NA, MPA_Management = NA,
+        Management_Zone = NA, Reef_Zone = NA, Reef_Type = `Reef Zone`, Notes = Comments
+    ) %>%
+    select(
+        EAA_Code, Site, Depth, Latitude, Longitude, MPA_Management, Management_Zone,
+        Reef_Zone, Reef_Type, Notes
+    )
 df_benthic_cover <- df_benthic_cover_preliminary %>%
     left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
     left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
