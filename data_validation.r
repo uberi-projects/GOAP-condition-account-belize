@@ -58,8 +58,6 @@ checks_sites <- list(
 )
 validation_msgs_sites <- sapply(checks_sites, eval)
 
-# Validate  Surveys ---------------------------
-
 # Validate  Coral Community ---------------------------
 check_coral_community <- list(
     quote(check_completeness(df_coral_community, columns_coral_community)),
