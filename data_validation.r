@@ -1,24 +1,13 @@
 # data_validation.r
 
-# Source scripts ---------------------------
-source("data_restructuring.r")
-
 # Set boolean for whether test data or AGRRA data should be used ---------------------------
 test_on <- FALSE
-if (test_on == TRUE) {
-    df_sites <- df_test_sites
-    df_benthic_cover <- df_test_benthic_cover
-    df_recruits <- df_test_recruits
-    df_invertebrates <- df_test_invertebrates
-    df_organisms <- df_test_organisms
-    df_substrate <- df_test_substrate
-    df_coral_community <- df_test_coral_community
-    df_coralspp <- df_test_coralspp
-    df_disease <- df_test_disease
-    df_fish <- df_test_fish
+
+# Source code based on whether real data is being used or not ---------------------------
+if (test_on == FALSE) {
+    source("data_restructuring.r")
 } else {
-    df_substrate <- df_test_substrate
-    df_disease <- df_test_disease
+    source("helper_scripts/data_test_load.r")
 }
 
 # Define vectors of required columns ---------------------------

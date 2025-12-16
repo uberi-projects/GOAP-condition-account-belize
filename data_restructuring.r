@@ -3,13 +3,17 @@
 # Source scripts ---------------------------
 source("helper_scripts/packages_load.r")
 source("helper_scripts/functions_define.r")
-source("helper_scripts/data_test_load.r")
 
-# Read AGRRA data as exported from AGRRA platform ---------------------------
+# Check whether AGRRA data is present in the data deposit ---------------------------
 filepath_benthic <- file.path("data_deposit", "BenthicRaw.xlsx")
 filepath_coral <- file.path("data_deposit", "CoralRaw.xlsx")
 filepath_fish <- file.path("data_deposit", "FishRaw.xlsx")
 filepath_metadata <- file.path("data_deposit", "Metadata.xlsx")
+files <- c(filepath_benthic, filepath_coral, filepath_fish, filepath_metadata)
+missing <- files[!file.exists(files)]
+if (length(missing)) stop("Missing files: ", paste(missing, collapse = ", "), ". Please place AGRRA data in the data_deposit folder or switch to testing mode by setting test_on <- TRUE.")
+
+# Read AGRRA data as exported from AGRRA platform ---------------------------
 df_benthic_transects <- read_excel(filepath_benthic, sheet = 3, skip = 1)
 df_benthic_cover_preliminary <- read_excel(filepath_benthic, sheet = 4, skip = 1)
 df_quadrats <- read_excel(filepath_benthic, sheet = 5, skip = 1)
@@ -25,7 +29,11 @@ df_coralspp <- read_excel(filepath_metadata, sheet = 7)
 df_transects <- read_excel(filepath_metadata, sheet = 4)
 df_surveys <- read_excel(filepath_metadata, sheet = 3)
 
-# Covert AGRRA formatted data to GOAP formatted data ---------------------------
+# Read files not included in AGRRA exports ---------------------------
+df_substrate <- read_excel("data_dummy/Dummy_data_OA_Benthic Data Template.xlsx", sheet = "Ref_Substrate", na = "NA")
+df_disease <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = "Ref_Disease", na = "NA")
+
+# Convert AGRRA formatted data to GOAP formatted data ---------------------------
 df_sites <- df_surveys %>%
     mutate(
         EAA_Code = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name), Depth = NA, MPA_Management = NA,
