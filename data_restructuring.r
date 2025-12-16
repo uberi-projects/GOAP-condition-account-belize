@@ -22,7 +22,7 @@ df_coral_community_transects <- read_excel(filepath_coral, sheet = 3)
 df_coral_community_preliminary <- read_excel(filepath_coral, sheet = 4, skip = 2)
 df_coral_community_diseases <- read_excel(filepath_coral, sheet = 5)
 df_coral_community_counts <- read_excel(filepath_coral, sheet = 6)
-df_fish <- read_excel(filepath_fish, sheet = 3, skip = 1)
+df_fish_preliminary <- read_excel(filepath_fish, sheet = 3, skip = 1)
 df_organisms_preliminary <- read_excel(filepath_metadata, sheet = 6)
 df_organisms_group <- read_excel(filepath_metadata, sheet = 5)
 df_coralspp <- read_excel(filepath_metadata, sheet = 7)
@@ -121,3 +121,16 @@ df_coral_community <- df_coral_community_preliminary %>%
         Max_Length, Max_Width, Max_Height, Percent_Pale, Percent_Bleach, OD, TD, RD, Disease, Clump_L, Clump_P, Clump_BL, Clump_NM,
         Clump_TM, Clump_OM, Clump_Other, Clump_Interval, Collector, Notes
     )
+df_fish <- df_fish_preliminary %>%
+    mutate(Transect = ID) %>%
+    left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
+    left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
+    mutate(
+        Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
+        Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Max_Relief = Maximum,
+        Collector = Surveyor, Notes = Comments.x
+    ) %>%
+    group_by(Survey.x) %>%
+    mutate(Transect = match(Transect, unique(Transect))) %>%
+    ungroup() %>%
+    select(Date, EA_Period, Site, Transect, Temp, Visibility, Weather, Start_Depth, End_Depth, Max_Relief, Collector, Notes)
