@@ -75,8 +75,9 @@ check_range <- function(range_col, range_lower, range_upper, type = c("numeric",
     } else if (type == "numeric") {
         valid <- num_col <= range_upper & num_col >= range_lower
     }
+    valid_non_na <- valid[!is.na(num_col)]
     invalid <- unique(num_col[!valid & !is.na(num_col)])
-    if (all(valid, na.rm = TRUE)) {
+    if (length(valid_non_na) == 0 || all(valid_non_na)) {
         return(paste0(col_name, " is validated. ", sprintf("Number of NAs: %d.", na_count)))
     } else {
         return(paste0(
