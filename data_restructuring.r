@@ -108,8 +108,8 @@ df_coral_community <- df_coral_community_preliminary %>%
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
         Time = format(Surveyed, format = "%H:%M"), Area_Surveyed = `Length Surveyed (m)`, Temp = `Water Temperature (°C)`,
         Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Organism = Name, Max_Length = Length,
-        Max_Width = Width, Max_Height = Height, Percent_Pale = Pale, Percent_Bleach = Bleached, OD = Old, TD = Transitional,
-        RD = New, Clump_L = NA, Clump_P = NA, Clump_BL = NA, Clump_NM = NA, Clump_TM = NA, Clump_OM = NA, Clump_Other = NA,
+        Max_Width = Width, Max_Height = Height, Percent_Pale = Pale*100, Percent_Bleach = Bleached*100, OD = Old*100, TD = Transitional*100,
+        RD = New*100, Clump_L = NA, Clump_P = NA, Clump_BL = NA, Clump_NM = NA, Clump_TM = NA, Clump_OM = NA, Clump_Other = NA,
         Clump_Interval = NA, Collector = Surveyor, Notes = Comments.x
     ) %>%
     left_join(df_coral_community_diseases, by = "Coral") %>%
