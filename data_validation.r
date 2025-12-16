@@ -68,7 +68,7 @@ check_coral_community <- list(
     quote(check_grouping(df_coral_community$Site, values_site_codes)),
     quote(check_time(df_coral_community$Time, earliest_time = "06:00", latest_time = "18:00")),
     quote(check_range(df_coral_community$Transect, 1, 6, c("int"))),
-    quote(check_range(df_coral_community$Area_Surveyed, 0, 10, c("int"))),
+    quote(check_range(df_coral_community$Area_Surveyed, 10, 10, c("int"))),
     quote(check_range(df_coral_community$Temp, 25, 30, c("numeric"))),
     quote(check_range(df_coral_community$Visibility, 1, 50, c("numeric"))),
     quote(check_grouping(df_coral_community$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
