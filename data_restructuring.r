@@ -54,6 +54,9 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         End_Depth = NA, Point = `Point Index` / 10, Organism = Primary,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
     ) %>%
+    group_by(Survey.x) %>%
+    mutate(Transect = match(Transect, unique(Transect))) %>%
+    ungroup() %>%
     select(
         Date, EA_Period, Site, Time, Temp, Visibility, Weather, Start_Depth, End_Depth, Transect,
         Point, Organism, Secondary, Algae_Height, Collector, Notes
@@ -71,6 +74,9 @@ df_recruits <- df_recruits_preliminary %>%
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
+    group_by(Survey.x) %>%
+    mutate(Transect = match(Transect, unique(Transect))) %>%
+    ungroup() %>%
     select(
         Date, EA_Period, Site, Temp, Visibility, Weather, Transect, Quadrat, Primary_Substrate,
         Secondary_Substrate, Organism, Size, Num, Collector, Notes
