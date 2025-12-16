@@ -68,7 +68,7 @@ check_range <- function(range_col, range_lower, range_upper, type = c("numeric",
         return(paste0(col_name, " does not exist or is empty."))
     }
     type <- match.arg(type)
-    num_col <- as.numeric(range_col)
+    num_col <- as.numeric(as.character(range_col))
     na_count <- sum(is.na(num_col))
     if (type == "int") {
         valid <- num_col %in% seq.int(range_lower, range_upper)
