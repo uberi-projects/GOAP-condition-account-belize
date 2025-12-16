@@ -81,6 +81,21 @@ df_recruits <- df_recruits_preliminary %>%
         Date, EA_Period, Site, Temp, Visibility, Weather, Transect, Quadrat, Primary_Substrate,
         Secondary_Substrate, Organism, Size, Num, Collector, Notes
     )
+df_invertebrates <- df_benthic_transects %>%
+    rename(Transect = ID) %>%
+    left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
+    left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
+    mutate(
+        Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
+        Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Collector = Surveyor, Notes = Comments.x
+    ) %>%
+    pivot_longer(cols = c("Juvenile Diadema", "Adult Diadema", "Other Urchins", "Lobster", "Conch", "Sea Cucumber"), names_to = "Species", values_to = "Num") %>%
+    group_by(Survey.x) %>%
+    mutate(Transect = match(Transect, unique(Transect))) %>%
+    ungroup() %>%
+    select(Date, EA_Period, Site, Temp, Visibility, Weather, Transect, Species, Num, Collector, Notes)
+names(df_invertebrates)
+names(df_invertebrates_TEST)
 df_organisms <- df_organisms_preliminary %>%
     left_join(df_coralspp, by = "ID") %>%
     left_join(df_organisms_group %>% rename(Category = ID), by = "Category") %>%
