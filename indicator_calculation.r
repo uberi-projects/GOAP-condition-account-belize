@@ -1,5 +1,8 @@
 # indicator_calculation.r
 
+# Set boolean for whether test data or AGRRA data should be used ---------------------------
+test_on <- TRUE
+
 # Source scripts ---------------------------
 source("data_validation.r")
 

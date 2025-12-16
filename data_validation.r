@@ -1,7 +1,9 @@
 # data_validation.r
 
 # Set boolean for whether test data or AGRRA data should be used ---------------------------
-test_on <- FALSE
+if (!exists("test_on", envir = .GlobalEnv)) {
+    test_on <- FALSE
+}
 
 # Source code based on whether real data is being used or not ---------------------------
 if (test_on == FALSE) {
