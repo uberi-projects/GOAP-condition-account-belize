@@ -28,7 +28,7 @@ df_surveys <- read_excel(filepath_metadata, sheet = 3)
 # Covert AGRRA formatted data to GOAP formatted data ---------------------------
 df_sites <- df_surveys %>%
     mutate(
-        EAA_Code = NA, Site = paste(Code, Name), Depth = NA, MPA_Management = NA,
+        EAA_Code = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name), Depth = NA, MPA_Management = NA,
         Management_Zone = NA, Reef_Zone = NA, Reef_Type = `Reef Zone`, Notes = Comments
     ) %>%
     select(
@@ -41,9 +41,9 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
     mutate(
         EA_Period = NA, Date = format(Surveyed, format = "%Y-%m-%d"), Organism = Primary,
-        Site = paste(Code, Name.y), Time = format(Surveyed, format = "%H:%M"),
+        Site = ifelse(!is.na(Code) & Code != "", Code, Name.y), Time = format(Surveyed, format = "%H:%M"),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA,
-        End_Depth = NA, Point = `Point Index`/10, Organism = Primary,
+        End_Depth = NA, Point = `Point Index` / 10, Organism = Primary,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
     ) %>%
     select(
@@ -57,7 +57,7 @@ df_recruits <- df_recruits_preliminary %>%
     left_join(df_quadrats, by = c("Transect", "Quadrat Index")) %>%
     left_join(df_coralspp %>% rename(Taxonomy = ID), by = "Taxonomy") %>%
     mutate(
-        Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = paste(Code, Name.y),
+        Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index`,
         Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Taxonomy,
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
