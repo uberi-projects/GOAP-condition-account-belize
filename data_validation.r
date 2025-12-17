@@ -142,7 +142,7 @@ check_invertebrates <- list(
     quote(check_range(df_invertebrates$Transect, 1, 6, c("int"))),
     quote(check_grouping(df_invertebrates$Species, c(
         "Conch", "Lobster", "Adult Diadema",
-        "Juvenille Diadema", "Sea Cucumber", "Other Urchins"
+        "Juvenile Diadema", "Sea Cucumber", "Other Urchins"
     ))),
     quote(check_range(df_invertebrates$Num, 0, 99, c("int")))
 )
