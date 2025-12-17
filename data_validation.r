@@ -75,8 +75,8 @@ check_coral_community <- list(
     quote(check_grouping(df_coral_community$Organism, df_coralspp$Code)),
     quote(check_range(df_coral_community$Isolates, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Max_Length, 4, 200, c("int"))),
-    quote(check_range(df_coral_community$Max_Width, 4, 200, c("int"))),
-    quote(check_range(df_coral_community$Max_Height, 4, 200, c("int"))),
+    quote(check_range(df_coral_community$Max_Width, 1, 200, c("int"))),
+    quote(check_range(df_coral_community$Max_Height, 1, 200, c("int"))),
     quote(check_range(df_coral_community$Percent_Pale, 0, 100, c("int"))),
     quote(check_range(df_coral_community$Percent_Bleach, 0, 100, c("int"))),
     quote(check_range(df_coral_community$OD, 0, 100, c("int"))),
@@ -160,7 +160,7 @@ check_relief <- list(
     quote(check_grouping(df_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_fish$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_fish$End_Depth, 0, 20, c("numeric"))),
-    quote(check_range(df_fish$Max_Relief, 0, 99, c("int")))
+    quote(check_range(df_fish$Max_Relief, 0, 200, c("int")))
 )
 validation_msgs_fish <- sapply(check_relief, eval)
 
