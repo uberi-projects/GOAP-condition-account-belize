@@ -16,8 +16,8 @@ benthic_cover_presence <- df_benthic_cover %>%
     left_join(df_organisms_unique %>% select(Code, Primary_Type = Type), by = c("Organism" = "Code")) %>%
     left_join(df_organisms_unique %>% select(Code, Secondary_Type = Type), by = c("Secondary" = "Code")) %>%
     mutate(
-        Coral_Presence = Vectorize(calculate_type_weight)(Primary_Type, Secondary_Type, coral_category),
-        Algae_Presence = Vectorize(calculate_type_weight)(Primary_Type, Secondary_Type, algae_category),
+        Coral_Presence = Vectorize(calculate_type_presence)(Primary_Type, Secondary_Type, coral_category),
+        Algae_Presence = Vectorize(calculate_type_presence)(Primary_Type, Secondary_Type, algae_category),
         Year = format(as.Date(Date), format = "%Y")
     )
 
