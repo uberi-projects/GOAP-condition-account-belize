@@ -62,7 +62,32 @@ indicator_fma <- benthic_cover_presence_fma %>%
     mutate(across(-Year, ~ round(.x, 2)))
 
 # Calculate recruit density ---------------------------
-
+benthic_recruits_rd <- df_recruits %>%
+    mutate(Year = format(as.Date(Date), format = "%Y")) %>%
+    group_by(Year, Date, Site) %>%
+    complete(Transect, Quadrat = 1:4, fill = list(Num = 0, Size = NA_character_)) %>%
+    group_by(Year, Date, Site, Transect, Quadrat) %>%
+    summarize(
+        Recruits = sum(Num, na.rm = TRUE),
+        `Small Recruits` = sum(Num[Size == "SR"], na.rm = TRUE),
+        `Large Recruits` = sum(Num[Size == "LR"], na.rm = TRUE)
+    ) %>%
+    group_by(Year, Date, Site) %>%
+    summarize( # calculate density per meter
+        All = sum(Recruits) / 25,
+        Small = sum(`Small Recruits`) / 25,
+        Large = sum(`Large Recruits`) / 25
+    )
+indicator_rd <- benthic_recruits_rd %>%
+    pivot_longer(cols = 4:6, names_to = "Size", values_to = "Value") %>%
+    group_by(Year, Size) %>%
+    summarize(
+        Min = min(Value),
+        `Av.` = mean(Value),
+        Median = median(Value),
+        Max = max(Value)
+    )
+mutate(across(-Year, ~ round(.x, 2)))
 
 # Calculate live coral diversity ---------------------------
 
