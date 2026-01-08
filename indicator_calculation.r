@@ -86,10 +86,9 @@ indicator_rd <- benthic_recruits_rd %>%
         `Av.` = mean(Value),
         Median = median(Value),
         Max = max(Value)
-    )
-mutate(across(-Year, ~ round(.x, 2)))
+    ) %>%
+    mutate(across(-Size, ~ round(.x, 2)))
 
 # Calculate live coral diversity ---------------------------
-
 
 # Calculate rugosity ---------------------------
