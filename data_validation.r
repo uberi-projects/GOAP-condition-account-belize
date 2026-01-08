@@ -40,7 +40,7 @@ columns_relief <- c(
 )
 
 # Define allowable values for columns ---------------------------
-values_site_codes <- c("MXRCK", "BZ1077", "BZ1079", "BZ1081", " BZ1230", "BZ1231", "BZHCCD01", "BZHCCDO2", "CCSC", "BZ1229", "1076B")
+values_site_codes <- c("MXRCK", "BZ1077", "BZ1079", "BZ1081", "BZ1230", "BZ1231", "BZHCCD01", "BZHCCD02", "CCSC", "BZ1229", "1076B")
 values_mpa_names <- c("None", "BCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR", "LBCMR", "SCMR", "PHMR", "HMCNM")
 
 # Validate  Sites ---------------------------
