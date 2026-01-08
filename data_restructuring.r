@@ -35,6 +35,7 @@ df_disease <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sh
 
 # Convert AGRRA formatted data to GOAP formatted data ---------------------------
 df_sites <- df_surveys %>%
+    filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
         EAA_Code = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name), Depth = NA, MPA_Management = NA,
         Management_Zone = NA, Reef_Zone = NA, Reef_Type = `Reef Zone`, Notes = Comments
