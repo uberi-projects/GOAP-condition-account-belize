@@ -6,11 +6,11 @@ The purpose of this repository is to store the associated code for the Global Oc
 
 This repository includes three primary scripts, each of which feeds into the following:
 
-1. **data_restructuring.r** - ![status](https://img.shields.io/badge/status-not%20implemented-blue) - restructures data directly exported from AGRRA into the template used by GOAP. This script is automatically run when validating data or calculating indicators in this repository.
+1. **data_restructuring.r** - restructures data directly exported from AGRRA into the template used by GOAP. This script is automatically run when validating data or calculating indicators in this repository.
 
-2. **data_validation.r** - ![status](https://img.shields.io/badge/status-not%20implemented-blue) - validates restructured AGRRA data for use in the GOAP project.
+2. **data_validation.r** - validates restructured AGRRA data for use in the GOAP project.
 
-3. **indicator_calculation.r** - ![status](https://img.shields.io/badge/status-not%20implemented-blue) - calculates GOAP condition account indicator values for Belize from validated and restructured AGRRA data.
+3. **indicator_calculation.r** - calculates GOAP condition account indicator values for Belize from validated and restructured AGRRA data.
 
 In addition, there are helper R scripts, found in the helper_scripts folder:
 
