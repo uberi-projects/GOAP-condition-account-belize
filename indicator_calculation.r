@@ -90,5 +90,42 @@ indicator_rd <- benthic_recruits_rd %>%
     mutate(across(-Size, ~ round(.x, 2)))
 
 # Calculate live coral diversity ---------------------------
-
+coral_community_cd <- df_coral_community %>% 
+  mutate(Year = format(as.Date(Date), format = "%Y")) %>%
+  filter(!is.na(Organism), Organism != "") %>%
+  group_by(Year, Date, Site, Transect, Organism) %>%
+  summarize(
+    Abundance = n(),
+  ) %>%
+  group_by(Year, Date, Site, Transect) %>%
+  mutate(
+    p_i = Abundance / sum(Abundance)   # relative abundance
+  ) %>%
+  summarize(
+    Diversity = -sum(p_i * log(p_i), na.rm = TRUE),
+    Richness = n_distinct(Organism),
+  ) %>%
+  group_by(Year, Date, Site) %>%
+  summarize(
+    Diversity = mean(Diversity, na.rm = TRUE),
+    Richness = mean(Richness, na.rm = TRUE),
+  )
+indicator_cd <- coral_community_cd %>% 
+  group_by(Year, Site) %>%
+  summarize(
+    Diversity = mean(Diversity, na.rm = TRUE),
+    Richness = mean(Richness, na.rm = TRUE),
+    ) %>%
+  pivot_longer(cols = c(Diversity, Richness),
+               names_to = "Metric",
+               values_to = "Value") %>%
+  group_by(Year, Metric) %>%
+  summarize(
+    Min = min(Value, na.rm = TRUE),
+    `Av.` = mean(Value, na.rm = TRUE),
+    Median = median(Value, na.rm = TRUE),
+    Max = max(Value, na.rm = TRUE)
+  ) %>%
+  mutate(across(where(is.numeric), ~ round(.x, 2)))
+  
 # Calculate rugosity ---------------------------
