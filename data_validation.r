@@ -53,8 +53,8 @@ checks_sites <- list(
     quote(check_range(df_sites$Longitude, -88.99999, -87.00000, type = "numeric")),
     quote(check_grouping(df_sites$MPA_Management, values_mpa_names)),
     quote(check_grouping(df_sites$Management_Zone, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))),
-    quote(check_grouping(df_sites$Reef_Zone, df_reef_formations$`Reef Zone`)),
-    quote(check_grouping(df_sites$Reef_Type, df_reef_formations$`Reef Zone`))
+    quote(check_grouping(df_sites$Reef_Zone, df_formations$`Reef Zone`)),
+    quote(check_grouping(df_sites$Reef_Type, df_formations$`Reef Type`))
 )
 validation_msgs_sites <- sapply(checks_sites, eval)
 
