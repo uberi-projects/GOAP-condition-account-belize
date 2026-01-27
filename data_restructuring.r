@@ -38,7 +38,7 @@ df_sites <- df_surveys %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
         EAA_Code = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name), Depth = NA, MPA_Management = NA,
-        Management_Zone = NA, Reef_Zone = NA, Reef_Type = `Reef Zone`, Notes = Comments
+        Management_Zone = NA, Reef_Zone = `Reef Zone`, Reef_Type = `Reef Type`, Notes = Comments
     ) %>%
     select(
         EAA_Code, Site, Depth, Latitude, Longitude, MPA_Management, Management_Zone,
