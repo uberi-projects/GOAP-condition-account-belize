@@ -54,7 +54,7 @@ checks_sites <- list(
     quote(check_grouping(df_sites$MPA_Management, values_mpa_names)),
     quote(check_grouping(df_sites$Management_Zone, c("None", "PUZ", "GUZ", "CUZ", "NTZ"))),
     quote(check_grouping(df_sites$Reef_Zone, c("BR", "SFR", "DFR"))),
-    quote(check_grouping(df_sites$Reef_Type, c("Fringing", "Barrier", "Atoll", "Patch")))
+    quote(check_grouping(df_sites$Reef_Type, df_reef_foramtions$`Reef Zone`))
 )
 validation_msgs_sites <- sapply(checks_sites, eval)
 
