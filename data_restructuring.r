@@ -33,6 +33,11 @@ df_surveys <- read_excel(filepath_metadata, sheet = 3)
 df_substrate <- read_excel("data_dummy/Dummy_data_OA_Benthic Data Template.xlsx", sheet = "Ref_Substrate", na = "NA")
 df_disease <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = "Ref_Disease", na = "NA")
 
+# Create formations reference table from unique values in surveys ---------------------------
+df_formations <- df_surveys %>%
+    distinct(`Reef Zone`, `Reef Type`) %>%
+    filter(!is.na(`Reef Zone`) | !is.na(`Reef Type`))
+
 # Convert AGRRA formatted data to GOAP formatted data ---------------------------
 df_sites <- df_surveys %>%
     filter(Subregion == "Northern Barrier Complex") %>%
