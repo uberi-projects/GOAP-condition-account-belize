@@ -31,7 +31,7 @@ columns_invertebrates <- c(
 columns_coral_community <- c(
     "Date", "EA_Period", "Site", "Time", "Transect", "Area_Surveyed", "Temp", "Visibility", "Weather", "Start_Depth",
     "End_Depth", "Organism", "Isolates", "Max_Length", "Max_Width", "Max_Height", "Percent_Pale",
-    "Percent_Bleach", "OD", "Disease", "Clump_L", "Clump_P", "Clump_BL", "Clump_NM", "Clump_TM", "Clump_OM",
+    "Percent_Bleach", "OD", "TD", "RD", "Disease", "Clump_L", "Clump_P", "Clump_BL", "Clump_NM", "Clump_TM", "Clump_OM",
     "Clump_Other", "Clump_Interval", "Collector"
 )
 columns_relief <- c(
@@ -80,6 +80,8 @@ check_coral_community <- list(
     quote(check_range(df_coral_community$Percent_Pale, 0, 100, c("int"))),
     quote(check_range(df_coral_community$Percent_Bleach, 0, 100, c("int"))),
     quote(check_range(df_coral_community$OD, 0, 100, c("int"))),
+    quote(check_range(df_coral_community$TD, 0, 100, c("int"))),
+    quote(check_range(df_coral_community$RD, 0, 100, c("int"))),
     quote(check_grouping(df_coral_community$Disease, df_disease$`Genus / Group`)),
     quote(check_range(df_coral_community$Clump_L, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Clump_P, 0, 30, c("int"))),
