@@ -78,7 +78,7 @@ df_recruits <- df_recruits_preliminary %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index`,
-        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Taxonomy,
+        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Name,
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
