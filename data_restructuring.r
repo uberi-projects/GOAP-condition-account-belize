@@ -45,20 +45,22 @@ df_sites <- df_surveys %>%
         EAA_Code = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name), Depth = NA, MPA_Management = NA,
         Management_Zone = NA, Reef_Zone = `Reef Zone`, Reef_Type = `Reef Type`, Notes = Comments
     ) %>%
+    distinct(Site, .keep_all = TRUE) %>% 
     select(
         EAA_Code, Site, Depth, Latitude, Longitude, MPA_Management, Management_Zone,
         Reef_Zone, Reef_Type, Notes
     )
 df_benthic_cover <- df_benthic_cover_preliminary %>%
     left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
-    left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
+    left_join(df_transects %>% rename(Transect = ID), by = "Transect", relationship = "many-to-many") %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
+  left_join(df_organisms_preliminary %>% rename(Primary = ID), by = "Primary") %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
-        EA_Period = NA, Date = format(Surveyed, format = "%Y-%m-%d"), Organism = Primary,
+        EA_Period = NA, Date = format(Surveyed, format = "%Y-%m-%d"),
         Site = ifelse(!is.na(Code) & Code != "", Code, Name.y), Time = format(Surveyed, format = "%H:%M"),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA,
-        End_Depth = NA, Point = `Point Index` / 10, Organism = Primary,
+        End_Depth = NA, Point = `Point Index` / 10, Organism = Name,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
     ) %>%
     group_by(Survey.x) %>%
