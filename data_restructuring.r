@@ -51,8 +51,8 @@ df_sites <- df_surveys %>%
         Reef_Zone, Reef_Type, Notes
     )
 df_benthic_cover <- df_benthic_cover_preliminary %>%
-    left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
-    left_join(df_transects %>% rename(Transect = ID), by = "Transect", relationship = "many-to-many") %>%
+    left_join(df_benthic_transects %>% rename(Transect = ID, Survey.x = Survey), by = "Transect") %>%
+    left_join(df_transects %>% rename(Transect = ID), by = c("Transect", "Survey.x" = "Survey")) %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
   left_join(df_organisms_preliminary %>% rename(Primary = ID), by = "Primary") %>%
     filter(Subregion == "Northern Barrier Complex") %>%
@@ -71,8 +71,8 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         Point, Organism, Secondary, Algae_Height, Collector, Notes
     )
 df_recruits <- df_recruits_preliminary %>%
-    left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
-    left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
+    left_join(df_benthic_transects %>% rename(Transect = ID, Survey.x = Survey), by = "Transect") %>%
+    left_join(df_transects %>% rename(Transect = ID), by = c("Transect", "Survey.x" = "Survey")) %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
     left_join(df_quadrats, by = c("Transect", "Quadrat Index")) %>%
     left_join(df_coralspp %>% rename(Taxonomy = ID), by = "Taxonomy") %>%
@@ -80,7 +80,7 @@ df_recruits <- df_recruits_preliminary %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index`,
-        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = ,
+        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Name,
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
@@ -111,8 +111,8 @@ df_organisms <- df_organisms_preliminary %>%
     mutate(Code = ID, `Scientific Name` = paste(Genus, Species), Type = Name) %>%
     select(Code, `Scientific Name`, Type)
 df_coral_community <- df_coral_community_preliminary %>%
-    left_join(df_coral_community_transects %>% rename(Transect = ID), by = "Transect") %>%
-    left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
+    left_join(df_coral_community_transects %>% rename(Transect = ID, Survey.x = Survey), by = "Transect") %>%
+    left_join(df_transects %>% rename(Transect = ID), by = c("Transect", "Survey.x" = "Survey")) %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
     left_join(df_coralspp %>% rename(Taxonomy = ID), by = "Taxonomy") %>%
     filter(Subregion == "Northern Barrier Complex") %>%
@@ -124,7 +124,7 @@ df_coral_community <- df_coral_community_preliminary %>%
         RD = New * 100, Clump_L = NA, Clump_P = NA, Clump_BL = NA, Clump_NM = NA, Clump_TM = NA, Clump_OM = NA, Clump_Other = NA,
         Clump_Interval = NA, Collector = Surveyor, Notes = Comments.x
     ) %>%
-    left_join(df_coral_community_diseases, by = "Coral") %>%
+    left_join(df_coral_community_diseases, by = "Coral", relationship = "many-to-many") %>%
     group_by(Survey.x) %>%
     mutate(Transect = Transect.x, Transect = match(Transect, unique(Transect))) %>%
     ungroup() %>%
