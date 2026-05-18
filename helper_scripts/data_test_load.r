@@ -15,6 +15,10 @@ df_coralspp <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", s
 df_disease <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = "Ref_Disease", na = "NA")
 df_fish <- read_excel("data_dummy/Dummy_data_OA_Relief Data Template.xlsx", sheet = "Relief", na = "NA")
 df_formations <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = "Ref_Formations", na = "NA")
+df_read_me <- read_excel("data_dumny/Dummy_data_OA_Coral Data Template.xlsx", sheet = "Read Me!!!", na = "NA")
+df_validation_coral <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template", sheet = "Validation_Rules", na = "NA")
+df_validation_benthic <- read_excel("data_dummy/Dummy_data_OA_Benthic Data Template", sheet = "Validation_Rules", na = "NA")
+df_validation_relief <- read_excel("data_dummy/Dummy_data_OA_Rekief Data Template", sheet = "Validation_Rules", na = "NA")
 
 ## Ensure time columns are properly formatted
 df_benthic_cover$Time <- format(df_benthic_cover$Time, "%H:%M")
