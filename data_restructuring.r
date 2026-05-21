@@ -52,7 +52,7 @@ df_sites <- df_surveys %>%
     )
 df_benthic_cover <- df_benthic_cover_preliminary %>%
     left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
-    left_join(df_transects %>% rename(Transect = ID), by = "Transect", relationship = "many-to-many") %>%
+    left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
   left_join(df_organisms_preliminary %>% rename(Primary = ID), by = "Primary") %>%
     filter(Subregion == "Northern Barrier Complex") %>%
@@ -119,12 +119,12 @@ df_coral_community <- df_coral_community_preliminary %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
         Time = format(Surveyed, format = "%H:%M"), Area_Surveyed = `Length Surveyed (m)`, Temp = `Water Temperature (°C)`,
-        Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Organism = Name, Max_Length = Length,
+        Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Organism = Taxonomy, Max_Length = Length,
         Max_Width = Width, Max_Height = Height, Percent_Pale = Pale * 100, Percent_Bleach = Bleached * 100, OD = Old * 100, TD = Transitional * 100,
         RD = New * 100, Clump_L = NA, Clump_P = NA, Clump_BL = NA, Clump_NM = NA, Clump_TM = NA, Clump_OM = NA, Clump_Other = NA,
         Clump_Interval = NA, Collector = Surveyor, Notes = Comments.x
     ) %>%
-    left_join(df_coral_community_diseases, by = "Coral") %>%
+    left_join(df_coral_community_diseases, by = "Coral", relationship = "many-to-many") %>%
     group_by(Survey.x) %>%
     mutate(Transect = Transect.x, Transect = match(Transect, unique(Transect))) %>%
     ungroup() %>%
