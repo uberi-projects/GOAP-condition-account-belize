@@ -60,7 +60,7 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         EA_Period = NA, Date = format(Surveyed, format = "%Y-%m-%d"),
         Site = ifelse(!is.na(Code) & Code != "", Code, Name.y), Time = format(Surveyed, format = "%H:%M"),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA,
-        End_Depth = NA, Point = `Point Index` / 10, Organism = Name,
+        End_Depth = NA, Point = `Point Index` / 10, Organism = Primary,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
     ) %>%
     group_by(Survey.x) %>%
@@ -80,7 +80,7 @@ df_recruits <- df_recruits_preliminary %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index`,
-        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = ,
+        Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Taxonomy,
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
