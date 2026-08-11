@@ -138,9 +138,60 @@ fish_relief <- df_fish %>%
 indicator_relief <- fish_relief %>%
     group_by(Year) %>%
     summarize(
-        `Min (Site)` = min(Relief_Site),
-        `Av. (Site)` = mean(Relief_Site),
-        `Median (Site)` = median(Relief_Site),
-        `Max (Site)` = max(Relief_Site)
+        `Min (Site)` = min(Relief_Site, na.rm = TRUE),
+        `Av. (Site)` = mean(Relief_Site, na.rm = TRUE),
+        `Median (Site)` = median(Relief_Site, na.rm = TRUE),
+        `Max (Site)` = max(Relief_Site, na.rm = TRUE)
     ) %>%
     mutate(across(-Year, ~ round(.x, 2)))
+# =============================================================================                        
+# EXPORT SITE-LEVEL INDICATOR VALUES                                                                   
+# =============================================================================                        
+# This output bridges the data processing pipeline to the SEEA EA            
+# accounting steps (normalization, geographic aggregation, table assembly).                            
+# Output format: one row per site per indicator per year.                                             
+# Columns: Year, Site, Indicator, Value                                                                
+
+message("---- Exporting site-level indicator values ----")                                             
+
+site_coral_cover <- benthic_cover_presence_lcc %>%                                                     
+  distinct(Year, Site, Value = Coral_Cover_Site) %>%                                                 
+  mutate(Indicator = "Live_Coral_Cover")                                                             
+
+site_macroalgae <- benthic_cover_presence_fma %>%                                                      
+  distinct(Year, Site, Value = Algae_Cover_Site) %>% 
+  mutate(Indicator = "Fleshy_Macroalgae_Cover")                                                      
+
+site_recruits <- benthic_recruits_rd %>%                                                               
+  ungroup() %>%                                   
+  group_by(Year, Site) %>%                                                                           
+  summarize(Value = mean(All, na.rm = TRUE), .groups = "drop") %>%                                   
+  mutate(Indicator = "Recruit_Density")                                                            
+
+site_diversity <- coral_community_cd %>%                                     
+  ungroup() %>%                                                                                    
+  group_by(Year, Site) %>%                       
+  summarize(Value = mean(Diversity, na.rm = TRUE), .groups = "drop") %>%                             
+  mutate(Indicator = "Coral_Diversity_H") 
+
+site_relief <- fish_relief %>%                                               
+  ungroup() %>%                                                                                      
+  mutate(Value = Relief_Site, Indicator = "Reef_Relief") %>%
+  select(Year, Site, Value, Indicator)                                                               
+
+site_indicators <- bind_rows(                                                                        
+  site_coral_cover,                                                                                  
+  site_macroalgae,                               
+  site_recruits,                                                                                     
+  site_diversity,                                                          
+  site_relief                                                                                      
+) %>%                                                  
+  select(Year, Site, Indicator, Value) %>%                                                           
+  arrange(Year, Site, Indicator)     
+
+write.csv(site_indicators, "outputs/site_level_indicators.csv", row.names = FALSE)
+message("  Exported ", nrow(site_indicators), " rows to outputs/site_level_indicators.csv")          
+message("  Years: ", paste(unique(site_indicators$Year), collapse = ", "))                             
+message("  Indicators: ", paste(unique(site_indicators$Indicator), collapse = ", "))
+message("  Sites: ", n_distinct(site_indicators$Site))  
+
