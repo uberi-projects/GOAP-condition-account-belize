@@ -18,7 +18,7 @@ df_formations <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx",
 df_read_me <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = "Read Me!!!", na = "NA")
 df_validation_coral <- read_excel("data_dummy/Dummy_data_OA_Coral Data Template.xlsx", sheet = "Validation_Rules", na = "NA")
 df_validation_benthic <- read_excel("data_dummy/Dummy_data_OA_Benthic Data Template.xlsx", sheet = "Validation_Rules", na = "NA")
-df_validation_relief <- read_excel("data_dummy/Dummy_data_OA_Rekief Data Template.xlsx", sheet = "Validation_Rules", na = "NA")
+df_validation_relief <- read_excel("data_dummy/Dummy_data_OA_Relief Data Template.xlsx", sheet = "Validation_Rules", na = "NA")
 
 ## Ensure time columns are properly formatted
 df_benthic_cover$Time <- format(df_benthic_cover$Time, "%H:%M")
