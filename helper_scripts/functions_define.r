@@ -141,5 +141,53 @@ check_time <- function(time_col, earliest_time = "06:00", latest_time = "18:00")
 }
 list_functions$check_time <- check_time
 
+
+#Data set summary message with description of the data set for cataloging ---------------
+
+dataset_summary <- function(data, dataset, source_file, description, surveys = df_surveys) {
+  years <- if ("Date" %in% names(data) && nrow(data) > 0) {
+    x <- trimws(as.character(data$Date))
+    sort(unique(substr(x[!is.na(x) & x != ""], 1, 4)))
+  } else character(0)
+  site_subregions <- surveys %>%
+    transmute(
+      Site = ifelse(!is.na(Code) & 
+        trimws(as.character(Code)) != "",
+        trimws(as.character(Code)),
+        trimws(as.character(Name))),
+      Subregion = trimws(as.character(Subregion))) %>%
+    filter(!is.na(Site), Site != "", !is.na(Subregion), Subregion != "") %>%
+    distinct(Site, Subregion)
+  subregion_records <- if ("Site" %in% names(data)) {
+    data %>%
+      transmute(Site = trimws(as.character(Site))) %>%
+      left_join(site_subregions, by = "Site") %>%
+      filter(!is.na(Subregion)) %>%
+      count(Subregion, name = "Records")
+  } else {
+    tibble(Subregion = character(), Records = integer())
+  }
+  subregions <- site_subregions %>%
+    distinct(Subregion) %>%
+    arrange(Subregion) %>%
+    left_join(subregion_records, by = "Subregion") %>%
+    mutate(Records = ifelse(is.na(Records), 0, Records))
+  summary <- c(
+    paste0("Dataset: ", dataset),
+    paste0("Source File: ", source_file),
+    paste0("Description: ", description),
+    paste0("Survey Year(s): ",
+           if (length(years) > 0) paste(years, collapse = ", ") else "Not detected"),
+    "",
+    "Subregions:")
+  for (i in seq_len(nrow(subregions))) {
+    summary <- c(
+      summary,
+      paste0(subregions$Subregion[i], ": ",
+             format(subregions$Records[i], big.mark = ","), " records"))
+  }
+  c(summary, "")
+}
+  
 # Report on functions created ---------------------------
 message("New functions created: ", paste(names(list_functions), collapse = ", "))
