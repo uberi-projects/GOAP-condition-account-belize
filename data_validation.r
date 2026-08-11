@@ -40,7 +40,7 @@ columns_relief <- c(
 )
 
 # Define allowable values for columns ---------------------------
-values_site_codes <- c("MXRCK", "BZ1077", "BZ1079", "BZ1081", "BZ1230", "BZ1231", "BZHCCD01", "BZHCCD02", "CCSC", "BZ1229", "1076B")
+values_site_codes <- c("MXRCK", "BZ1077", "BZ1079", "BZ1080", "BZ1081", "BZ1230", "BZ1231", "BZ1234", "BZHCCD01", "BZHCCD02", "CCSC", "BZ1229", "1076B")
 values_mpa_names <- c("None", "BCMR", "HCMR", "CCMR", "TAMR", "GRMR", "SWCMR", "GSSCMR", "LBCMR", "SCMR", "PHMR", "HMCNM")
 
 # Validate  Sites ---------------------------
@@ -72,7 +72,7 @@ check_coral_community <- list(
     quote(check_grouping(df_coral_community$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_coral_community$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_coral_community$End_Depth, 0, 20, c("numeric"))),
-    quote(check_grouping(df_coral_community$Organism, df_coralspp$Code)),
+    quote(check_grouping(df_coral_community$Organism, df_coralspp_lookup$Code)),
     quote(check_range(df_coral_community$Isolates, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Max_Length, 4, 200, c("int"))),
     quote(check_range(df_coral_community$Max_Width, 1, 200, c("int"))),
@@ -126,7 +126,7 @@ check_recruits <- list(
     quote(check_range(df_recruits$Quadrat, 1, 5, c("int"))),
     quote(check_grouping(df_recruits$Primary_Substrate, df_substrate$`Genus / Group`)),
     quote(check_grouping(df_recruits$Secondary_Substrate, df_substrate$`Genus / Group`)),
-    quote(check_grouping(df_recruits$Organism, df_coralspp$ID)),
+    quote(check_grouping(df_recruits$Organism, df_coralspp_lookup$ID)),
     quote(check_grouping(df_recruits$Size, c("SR", "LR"))),
     quote(check_range(df_recruits$Num, 0, 30, c("int")))
 )
@@ -166,13 +166,33 @@ check_relief <- list(
 )
 validation_msgs_fish <- sapply(check_relief, eval)
 
+# Create data set summaries ---------------------------
+dataset_summary_sites <- dataset_summary(
+    df_sites, "Sites", "Metadata.xlsx","Site locations, coordinates, management status and reef classifications.")
+dataset_summary_coral <- dataset_summary(
+    df_coral_community, "Coral Community", "CoralRaw.xlsx","Colony-level coral observations including size, bleaching, mortality and disease.")
+dataset_summary_benthic <- dataset_summary(
+    df_benthic_cover, "Benthic Cover", "BenthicRaw.xlsx", "Transect-based benthic point observations.")
+dataset_summary_recruits <- dataset_summary(
+    df_recruits, "Coral Recruits", "CoralRaw.xlsx", "Quadrat-based coral recruit observations.")
+dataset_summary_invertebrates <- dataset_summary(
+    df_invertebrates, "Invertebrates", "FishRaw.xlsx", "Reef-associated invertebrate observations.")
+dataset_summary_fish <- dataset_summary(
+  df_fish, "Fish (Relief)", "FishRaw.xlsx", "Fish survey structural-relief observations.")
+
 # Print validation messages to text file ---------------------------
 validation_msgs_sections <- list(
-    "Sites" = validation_msgs_sites,
+    "Sites Dataset Summary" = dataset_summary_sites,
+    "Sites Validation" = validation_msgs_sites,
+    "Coral Community Dataset Summary" = dataset_summary_coral,
     "Coral Community" = validation_msgs_coral,
+    "Benthic Cover Dataset Summary" = dataset_summary_benthic,
     "Benthic Cover" = validation_msgs_benthic,
+    "Recruits Dataset Summary" = dataset_summary_recruits,
     "Recruits" = validation_msgs_recruits,
-    "Invertebrates" = validation_msgs_invertebrates,
+    "Invertebrates Dataset Summary" = dataset_summary_invertebrates,
+    "Invertebrates Validation" = validation_msgs_invertebrates,
+    "Fish Dataset Summary" = dataset_summary_fish,
     "Fish (Relief)" = validation_msgs_fish
 )
 if (test_on == TRUE) {
@@ -183,8 +203,9 @@ if (test_on == TRUE) {
 for (section_name in names(validation_msgs_sections)) {
     validation_msgs <- c(
         validation_msgs,
-        paste0("==== ", section_name, " Validation ===="),
+        paste0("==== ", section_name, " ===="),
         validation_msgs_sections[[section_name]], ""
     )
 }
 writeLines(validation_msgs, "outputs/validation_report.txt")
+
