@@ -13,7 +13,7 @@ if (export_test_data == TRUE) {
     source("helper_scripts/data_restructuring.r")
 }
 
-# Check wether AGRRA data os present in the data deposit
+# Check weather AGRRA data is present in the data deposit
 filepath_benthic <- file.path("data_deposit", "BenthicRaw.xlsx")
 filepath_coral <- file.path("data_deposit", "CoralRaw.xlsx")
 filepath_fish <- file.path("data_deposit", "FishRaw.xlsx")
@@ -22,18 +22,29 @@ files <- c(filepath_benthic, filepath_coral, filepath_fish, filepath_metadata)
 missing <- files[!file.exists(files)]
 if (length(missing)) stop("Missing files: ", paste(missing, collapse = ", "), ". Please place AGRRA data in the data_deposit folder or switch to testing mode by setting test_on <- TRUE.")
 
-# Remove organism ID codes and rplacoing them with organism names in required dataframes
-df_benthic_export <- df_benthic_cover %>% 
-    left_join(df_organisms_preliminary %>% select(ID, Name), by = c("Organism" = "ID")) %>% 
-    mutate(Organism = Name) %>% select(-Name)
+# Remove organism ID codes and replacing them with organism names in required data frames
 
-df_recruits_export <- df_recruits %>% 
-    left_join(df_coralspp %>% select(ID, Name), by = c("Organism" = "ID")) %>% 
-    mutate(Organism = Name) %>% select(-Name)
+df_benthic_export <- df_benthic_cover %>%
+    mutate(Organism=as.character(Organism)) %>%
+    left_join(df_organisms_preliminary %>%
+    transmute(ID=as.character(ID),Name), by=c("Organism"="ID")) %>%
+    mutate(Organism=coalesce(Name,Organism)) %>%
+    select(-Name)
 
-df_coral_export <- df_coral_community %>% 
-    left_join(df_coralspp %>% select(ID, Name), by = c("Organism" = "ID")) %>% 
-    mutate(Organism = Name) %>% select(-Name)
+df_recruits_export <- df_recruits %>%
+    mutate(Organism=as.character(Organism)) %>%
+    left_join(df_coralspp_lookup %>%
+    transmute(ID=as.character(ID),Name), by=c("Organism"="ID")) %>%
+    mutate(Organism=coalesce(Name,Organism)) %>%
+    select(-Name)
+
+df_coral_export <- df_coral_community %>%
+    mutate(Organism=as.character(Organism)) %>%
+    left_join(df_coralspp_lookup %>%
+    transmute(ID=as.character(ID), Name), by=c("Organism"="ID")) %>% 
+    mutate(Organism=coalesce(Name,Organism)) %>%
+    select(-Name)
+
 
 # Adding in required sheets to each excel export
 OA_Benthic_Data <- list( 
@@ -62,3 +73,4 @@ for (file_name in names(data_exports)) {
     writexl::write_xlsx(data_exports[[file_name]], 
     path = paste0("exports/" ,file_name, ".xlsx"))
 }
+
