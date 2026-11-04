@@ -165,10 +165,12 @@ indicator_cd <- coral_community_cd %>%
     mutate(across(where(is.numeric), ~ round(.x, 2)))
 
 # Calculate max relief ---------------------------
+# One value per transect, so transects with more fish rows don't weigh more
 fish_relief <- df_fish %>%
     mutate(Year = format(as.Date(Date), format = "%Y")) %>%
+    distinct(Year, Site, Transect, Max_Relief) %>%
     group_by(Year, Site) %>%
-    summarize(Relief_Site = mean(Max_Relief, na.rm = TRUE))
+    summarize(Relief_Site = mean(Max_Relief, na.rm = TRUE), .groups = "drop")
 indicator_relief <- fish_relief %>%
     group_by(Year) %>%
     summarize(
@@ -178,6 +180,7 @@ indicator_relief <- fish_relief %>%
         `Max (Site)` = max(Relief_Site, na.rm = TRUE)
     ) %>%
     mutate(across(-Year, ~ round(.x, 2)))
+
 # =============================================================================                        
 # EXPORT SITE-LEVEL INDICATOR VALUES                                                                   
 # =============================================================================                        
