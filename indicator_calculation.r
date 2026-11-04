@@ -133,29 +133,22 @@ indicator_rd <- benthic_recruits_rd %>%
 coral_community_cd <- df_coral_community %>%
     mutate(Year = format(as.Date(Date), format = "%Y")) %>%
     filter(!is.na(Organism), Organism != "") %>%
-    group_by(Year, Date, Site, Transect, Organism) %>%
+    group_by(Year, Site, Transect, Organism) %>%
+    summarize(Abundance = n(), .groups = "drop") %>%
+    group_by(Year, Site, Transect) %>%
+    mutate(p_i = Abundance / sum(Abundance)) %>% # relative abundance
     summarize(
-        Abundance = n(),
-    ) %>%
-    group_by(Year, Date, Site, Transect) %>%
-    mutate(
-        p_i = Abundance / sum(Abundance) # relative abundance
-    ) %>%
-    summarize(
-        Diversity = -sum(p_i * log(p_i), na.rm = TRUE),
+        Diversity = -sum(p_i * log(p_i)),
         Richness = n_distinct(Organism),
+        .groups = "drop"
     ) %>%
-    group_by(Year, Date, Site) %>%
-    summarize(
-        Diversity = mean(Diversity, na.rm = TRUE),
-        Richness = mean(Richness, na.rm = TRUE),
-    )
-indicator_cd <- coral_community_cd %>%
     group_by(Year, Site) %>%
     summarize(
-        Diversity = mean(Diversity, na.rm = TRUE),
-        Richness = mean(Richness, na.rm = TRUE),
-    ) %>%
+        Diversity = mean(Diversity),
+        Richness = mean(Richness),
+        .groups = "drop"
+    )
+indicator_cd <- coral_community_cd %>%
     pivot_longer(
         cols = c(Diversity, Richness),
         names_to = "Metric",
@@ -163,10 +156,11 @@ indicator_cd <- coral_community_cd %>%
     ) %>%
     group_by(Year, Metric) %>%
     summarize(
-        Min = min(Value, na.rm = TRUE),
-        `Av.` = mean(Value, na.rm = TRUE),
-        Median = median(Value, na.rm = TRUE),
-        Max = max(Value, na.rm = TRUE)
+        Min = min(Value),
+        `Av.` = mean(Value),
+        Median = median(Value),
+        Max = max(Value),
+        .groups = "drop"
     ) %>%
     mutate(across(where(is.numeric), ~ round(.x, 2)))
 
