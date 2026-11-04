@@ -75,7 +75,7 @@ check_coral_community <- list(
     quote(check_range(df_coral_community$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_coral_community$End_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_coral_community$Depth, 0, 20, c("numeric"))), # general transect depth recorded by AGRRA
-    quote(check_grouping(df_coral_community$Organism, df_coralspp_lookup$Code)),
+    quote(check_grouping(df_coral_community$Organism, df_coralspp_lookup$ID)),
     quote(check_range(df_coral_community$Isolates, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Max_Length, 4, 200, c("int"))),
     quote(check_range(df_coral_community$Max_Width, 1, 200, c("int"))),
