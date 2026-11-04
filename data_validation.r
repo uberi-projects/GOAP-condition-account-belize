@@ -179,9 +179,9 @@ dataset_summary_coral <- dataset_summary(
 dataset_summary_benthic <- dataset_summary(
     df_benthic_cover, "Benthic Cover", "BenthicRaw.xlsx", "Transect-based benthic point observations.")
 dataset_summary_recruits <- dataset_summary(
-    df_recruits, "Coral Recruits", "CoralRaw.xlsx", "Quadrat-based coral recruit observations.")
+    df_recruits, "Coral Recruits", "BenthicRaw.xlsx", "Quadrat-based coral recruit observations.")
 dataset_summary_invertebrates <- dataset_summary(
-    df_invertebrates, "Invertebrates", "FishRaw.xlsx", "Reef-associated invertebrate observations.")
+    df_invertebrates, "Invertebrates", "BenthicRaw.xlsx", "Reef-associated invertebrate observations.")
 dataset_summary_fish <- dataset_summary(
   df_fish, "Fish (Relief)", "FishRaw.xlsx", "Fish survey structural-relief observations.")
 
