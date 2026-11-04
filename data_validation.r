@@ -74,6 +74,7 @@ check_coral_community <- list(
     quote(check_grouping(df_coral_community$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_coral_community$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_coral_community$End_Depth, 0, 20, c("numeric"))),
+    quote(check_range(df_coral_community$Depth, 0, 20, c("numeric"))), # general transect depth recorded by AGRRA
     quote(check_grouping(df_coral_community$Organism, df_coralspp_lookup$Code)),
     quote(check_range(df_coral_community$Isolates, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Max_Length, 4, 200, c("int"))),
@@ -108,6 +109,7 @@ check_benthic_cover <- list(
     quote(check_grouping(df_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_benthic_cover$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_benthic_cover$End_Depth, 0, 20, c("numeric"))),
+    quote(check_range(df_benthic_cover$Depth, 0, 20, c("numeric"))), # general transect depth recorded by AGRRA
     quote(check_range(df_benthic_cover$Transect, 1, 6, c("int"))),
     quote(check_range(df_benthic_cover$Point, 0, 9.9, c("numeric"))),
     quote(check_grouping(df_benthic_cover$Organism, df_organisms$Code)),
@@ -164,6 +166,7 @@ check_relief <- list(
     quote(check_grouping(df_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_fish$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_fish$End_Depth, 0, 20, c("numeric"))),
+    quote(check_range(df_fish$Depth, 0, 20, c("numeric"))), # general transect depth recorded by AGRRA
     quote(check_range(df_fish$Max_Relief, 0, 200, c("int")))
 )
 validation_msgs_fish <- sapply(check_relief, eval)

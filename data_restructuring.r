@@ -66,13 +66,13 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         EA_Period = NA, Date = format(Surveyed, format = "%Y-%m-%d"),
         Site = ifelse(!is.na(Code) & Code != "", Code, Name.y), Time = na_if(format(Surveyed, format = "%H:%M"), "00:00"),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA,
-        End_Depth = NA, Point = `Point Index` / 10, Organism = Primary,
+        End_Depth = NA, Depth = `Depth (m)`, Point = `Point Index` / 10, Organism = Primary,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
     ) %>%
     left_join(df_benthic_transect_numbers, by = "Transect") %>%
     mutate(Transect = Transect_Number) %>%
     select(
-        Date, EA_Period, Site, Time, Temp, Visibility, Weather, Start_Depth, End_Depth, Transect,
+        Date, EA_Period, Site, Time, Temp, Visibility, Weather, Start_Depth, End_Depth, Depth, Transect,
         Point, Organism, Secondary, Algae_Height, Collector, Notes
     )
 df_recruits <- df_recruits_preliminary %>%
@@ -123,7 +123,7 @@ df_coral_community <- df_coral_community_preliminary %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Site_Code) & Site_Code != "", Site_Code, Site_Name),
         Time = na_if(format(Surveyed, format = "%H:%M"), "00:00"), Area_Surveyed = `Length Surveyed (m)`, Temp = `Water Temperature (°C)`,
-        Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Organism = Taxonomy, Max_Length = Length,
+        Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Depth = `Depth (m)`, Organism = Taxonomy, Max_Length = Length,
         Max_Width = Width, Max_Height = Height, Percent_Pale = Pale * 100, Percent_Bleach = Bleached * 100, OD = Old * 100, TD = Transitional * 100,
         RD = New * 100, Clump_L = NA, Clump_P = NA, Clump_BL = NA, Clump_NM = NA, Clump_TM = NA, Clump_OM = NA, Clump_Other = NA,
         Clump_Interval = NA, Collector = Surveyor, Notes = Comments.x
@@ -138,7 +138,7 @@ df_coral_community <- df_coral_community_preliminary %>%
     mutate(Transect = Transect.x, Transect = match(Transect, unique(Transect))) %>%
     ungroup() %>%
     select(
-        Date, EA_Period, Site, Time, Transect, Area_Surveyed, Temp, Visibility, Weather, Start_Depth, End_Depth, Organism, Isolates,
+        Date, EA_Period, Site, Time, Transect, Area_Surveyed, Temp, Visibility, Weather, Start_Depth, End_Depth, Depth, Organism, Isolates,
         Max_Length, Max_Width, Max_Height, Percent_Pale, Percent_Bleach, OD, TD, RD, Disease, Clump_L, Clump_P, Clump_BL, Clump_NM,
         Clump_TM, Clump_OM, Clump_Other, Clump_Interval, Collector, Notes
     )
@@ -149,12 +149,12 @@ df_fish <- df_fish_preliminary %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
-        Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Max_Relief = Maximum,
+        Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Depth = `Depth (m)`, Max_Relief = Maximum,
         Collector = Surveyor, Notes = Comments.x
     ) %>%
     group_by(Survey.x) %>%
     mutate(Transect = match(Transect, unique(Transect))) %>%
     ungroup() %>%
-    select(Date, EA_Period, Site, Transect, Temp, Visibility, Weather, Start_Depth, End_Depth, Max_Relief, Collector, Notes)
+    select(Date, EA_Period, Site, Transect, Temp, Visibility, Weather, Start_Depth, End_Depth, Depth, Max_Relief, Collector, Notes)
 df_coralspp_lookup <- df_coralspp_lookup %>%
     mutate(Code = Name)
