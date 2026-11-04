@@ -9,6 +9,8 @@ source("data_validation.r")
 # Set vectors ---------------------------
 coral_category <- ifelse(test_on == TRUE, "Coral", "Calcifiers :: Coral")
 algae_category <- ifelse(test_on == TRUE, "Fleshy Macroalgae", "Algae :: Macro :: Fleshy")
+quadrats_per_transect <- 5 # AGRRA recruit quadrats per benthic transect
+quadrat_area_m2 <- 0.25 * 0.25 # AGRRA recruit quadrat is 25 x 25 cm
 
 # Check inputs ---------------------------
 stopifnot(
@@ -90,32 +92,42 @@ indicator_lcc <- summarize_cover(Coral_Cover_Site, Coral_Cover_Tran)
 indicator_fma <- summarize_cover(Algae_Cover_Site, Algae_Cover_Tran)
 
 # Calculate recruit density ---------------------------
-benthic_recruits_rd <- df_recruits %>%
+# Every benthic transect is surveyed for recruits, so sites with no recruit rows count as zero.
+# Surveyed area comes from the number of benthic transects at the site.
+recruits_site <- df_recruits %>%
     mutate(Year = format(as.Date(Date), format = "%Y")) %>%
-    group_by(Year, Date, Site) %>%
-    complete(Transect, Quadrat = 1:4, fill = list(Num = 0, Size = NA_character_)) %>%
-    group_by(Year, Date, Site, Transect, Quadrat) %>%
+    group_by(Year, Site) %>%
     summarize(
         Recruits = sum(Num, na.rm = TRUE),
         `Small Recruits` = sum(Num[Size == "SR"], na.rm = TRUE),
-        `Large Recruits` = sum(Num[Size == "LR"], na.rm = TRUE)
-    ) %>%
-    group_by(Year, Date, Site) %>%
-    summarize( # calculate density per meter
-        All = sum(Recruits) / 25,
-        Small = sum(`Small Recruits`) / 25,
-        Large = sum(`Large Recruits`) / 25
+        `Large Recruits` = sum(Num[Size == "LR"], na.rm = TRUE),
+        .groups = "drop"
+    )
+unmatched_recruits <- anti_join(recruits_site, benthic_cover_tran, by = c("Year", "Site"))
+if (nrow(unmatched_recruits) > 0) {
+    warning("Recruit sites with no benthic cover data (dropped): ", paste(unmatched_recruits$Site, collapse = ", "))
+}
+benthic_recruits_rd <- benthic_cover_tran %>%
+    count(Year, Site, name = "Transects") %>%
+    left_join(recruits_site, by = c("Year", "Site")) %>%
+    mutate(across(c(Recruits, `Small Recruits`, `Large Recruits`), ~ coalesce(.x, 0))) %>%
+    transmute( # calculate density per square meter
+        Year, Site,
+        All = Recruits / (Transects * quadrats_per_transect * quadrat_area_m2),
+        Small = `Small Recruits` / (Transects * quadrats_per_transect * quadrat_area_m2),
+        Large = `Large Recruits` / (Transects * quadrats_per_transect * quadrat_area_m2)
     )
 indicator_rd <- benthic_recruits_rd %>%
-    pivot_longer(cols = 4:6, names_to = "Size", values_to = "Value") %>%
+    pivot_longer(cols = c(All, Small, Large), names_to = "Size", values_to = "Value") %>%
     group_by(Year, Size) %>%
     summarize(
         Min = min(Value),
         `Av.` = mean(Value),
         Median = median(Value),
-        Max = max(Value)
+        Max = max(Value),
+        .groups = "drop"
     ) %>%
-    mutate(across(-Size, ~ round(.x, 2)))
+    mutate(across(-c(Year, Size), ~ round(.x, 2)))
 
 # Calculate live coral diversity ---------------------------
 coral_community_cd <- df_coral_community %>%
