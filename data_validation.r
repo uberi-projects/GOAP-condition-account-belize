@@ -59,6 +59,8 @@ checks_sites <- list(
 validation_msgs_sites <- sapply(checks_sites, eval)
 
 # Validate  Coral Community ---------------------------
+# Corals with several diseases hold them as one "; "-separated value
+coral_disease_values <- trimws(unlist(strsplit(df_coral_community$Disease, ";")))
 check_coral_community <- list(
     quote(check_completeness(df_coral_community, columns_coral_community)),
     quote(check_date(df_coral_community$Date)),
@@ -72,7 +74,8 @@ check_coral_community <- list(
     quote(check_grouping(df_coral_community$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_coral_community$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_coral_community$End_Depth, 0, 20, c("numeric"))),
-    quote(check_grouping(df_coral_community$Organism, df_coralspp_lookup$Code)),
+    quote(check_range(df_coral_community$Depth, 0, 20, c("numeric"))), # general transect depth recorded by AGRRA
+    quote(check_grouping(df_coral_community$Organism, df_coralspp_lookup$ID)),
     quote(check_range(df_coral_community$Isolates, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Max_Length, 4, 200, c("int"))),
     quote(check_range(df_coral_community$Max_Width, 1, 200, c("int"))),
@@ -82,7 +85,7 @@ check_coral_community <- list(
     quote(check_range(df_coral_community$OD, 0, 100, c("int"))),
     quote(check_range(df_coral_community$TD, 0, 100, c("int"))),
     quote(check_range(df_coral_community$RD, 0, 100, c("int"))),
-    quote(check_grouping(df_coral_community$Disease, df_disease$`Genus / Group`)),
+    quote(check_grouping(coral_disease_values, df_disease$`Genus / Group`)),
     quote(check_range(df_coral_community$Clump_L, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Clump_P, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Clump_BL, 0, 30, c("int"))),
@@ -106,6 +109,7 @@ check_benthic_cover <- list(
     quote(check_grouping(df_benthic_cover$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_benthic_cover$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_benthic_cover$End_Depth, 0, 20, c("numeric"))),
+    quote(check_range(df_benthic_cover$Depth, 0, 20, c("numeric"))), # general transect depth recorded by AGRRA
     quote(check_range(df_benthic_cover$Transect, 1, 6, c("int"))),
     quote(check_range(df_benthic_cover$Point, 0, 9.9, c("numeric"))),
     quote(check_grouping(df_benthic_cover$Organism, df_organisms$Code)),
@@ -162,6 +166,7 @@ check_relief <- list(
     quote(check_grouping(df_fish$Weather, c("Sunny", "Partly Cloudy", "Overcast", "Windy", "Rainy"))),
     quote(check_range(df_fish$Start_Depth, 0, 20, c("numeric"))),
     quote(check_range(df_fish$End_Depth, 0, 20, c("numeric"))),
+    quote(check_range(df_fish$Depth, 0, 20, c("numeric"))), # general transect depth recorded by AGRRA
     quote(check_range(df_fish$Max_Relief, 0, 200, c("int")))
 )
 validation_msgs_fish <- sapply(check_relief, eval)
@@ -174,9 +179,9 @@ dataset_summary_coral <- dataset_summary(
 dataset_summary_benthic <- dataset_summary(
     df_benthic_cover, "Benthic Cover", "BenthicRaw.xlsx", "Transect-based benthic point observations.")
 dataset_summary_recruits <- dataset_summary(
-    df_recruits, "Coral Recruits", "CoralRaw.xlsx", "Quadrat-based coral recruit observations.")
+    df_recruits, "Coral Recruits", "BenthicRaw.xlsx", "Quadrat-based coral recruit observations.")
 dataset_summary_invertebrates <- dataset_summary(
-    df_invertebrates, "Invertebrates", "FishRaw.xlsx", "Reef-associated invertebrate observations.")
+    df_invertebrates, "Invertebrates", "BenthicRaw.xlsx", "Reef-associated invertebrate observations.")
 dataset_summary_fish <- dataset_summary(
   df_fish, "Fish (Relief)", "FishRaw.xlsx", "Fish survey structural-relief observations.")
 
@@ -207,5 +212,6 @@ for (section_name in names(validation_msgs_sections)) {
         validation_msgs_sections[[section_name]], ""
     )
 }
+dir.create("outputs", showWarnings = FALSE)
 writeLines(validation_msgs, "outputs/validation_report.txt")
 
