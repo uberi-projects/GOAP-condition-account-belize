@@ -181,52 +181,28 @@ indicator_relief <- fish_relief %>%
     ) %>%
     mutate(across(-Year, ~ round(.x, 2)))
 
-# =============================================================================                        
-# EXPORT SITE-LEVEL INDICATOR VALUES                                                                   
-# =============================================================================                        
-# This output bridges the data processing pipeline to the SEEA EA            
-# accounting steps (normalization, geographic aggregation, table assembly).                            
-# Output format: one row per site per indicator per year.                                             
-# Columns: Year, Site, Indicator, Value                                                                
+# =============================================================================
+# EXPORT SITE-LEVEL INDICATOR VALUES
+# =============================================================================
+# This output bridges the data processing pipeline to the SEEA EA
+# accounting steps (normalization, geographic aggregation, table assembly).
+# Output format: one row per site per indicator per year.
+# Columns: Year, Site, Indicator, Value, Unit
 
-message("---- Exporting site-level indicator values ----")                                             
+message("---- Exporting site-level indicator values ----")
 
-site_coral_cover <- benthic_cover_site %>%
-  transmute(Year, Site, Value = Coral_Cover_Site, Indicator = "Live_Coral_Cover")
+site_indicators <- bind_rows(
+    benthic_cover_site %>% transmute(Year, Site, Indicator = "Live_Coral_Cover", Value = Coral_Cover_Site, Unit = "%"),
+    benthic_cover_site %>% transmute(Year, Site, Indicator = "Fleshy_Macroalgae_Cover", Value = Algae_Cover_Site, Unit = "%"),
+    benthic_recruits_rd %>% transmute(Year, Site, Indicator = "Recruit_Density", Value = All, Unit = "recruits/m2"),
+    coral_community_cd %>% transmute(Year, Site, Indicator = "Coral_Diversity_H", Value = Diversity, Unit = "H'"),
+    fish_relief %>% transmute(Year, Site, Indicator = "Reef_Relief", Value = Relief_Site, Unit = "cm")
+) %>%
+    arrange(Year, Site, Indicator)
 
-site_macroalgae <- benthic_cover_site %>%
-  transmute(Year, Site, Value = Algae_Cover_Site, Indicator = "Fleshy_Macroalgae_Cover")
-
-site_recruits <- benthic_recruits_rd %>%                                                               
-  ungroup() %>%                                   
-  group_by(Year, Site) %>%                                                                           
-  summarize(Value = mean(All, na.rm = TRUE), .groups = "drop") %>%                                   
-  mutate(Indicator = "Recruit_Density")                                                            
-
-site_diversity <- coral_community_cd %>%                                     
-  ungroup() %>%                                                                                    
-  group_by(Year, Site) %>%                       
-  summarize(Value = mean(Diversity, na.rm = TRUE), .groups = "drop") %>%                             
-  mutate(Indicator = "Coral_Diversity_H") 
-
-site_relief <- fish_relief %>%                                               
-  ungroup() %>%                                                                                      
-  mutate(Value = Relief_Site, Indicator = "Reef_Relief") %>%
-  select(Year, Site, Value, Indicator)                                                               
-
-site_indicators <- bind_rows(                                                                        
-  site_coral_cover,                                                                                  
-  site_macroalgae,                               
-  site_recruits,                                                                                     
-  site_diversity,                                                          
-  site_relief                                                                                      
-) %>%                                                  
-  select(Year, Site, Indicator, Value) %>%                                                           
-  arrange(Year, Site, Indicator)     
-
+dir.create("outputs", showWarnings = FALSE)
 write.csv(site_indicators, "outputs/site_level_indicators.csv", row.names = FALSE)
-message("  Exported ", nrow(site_indicators), " rows to outputs/site_level_indicators.csv")          
-message("  Years: ", paste(unique(site_indicators$Year), collapse = ", "))                             
+message("  Exported ", nrow(site_indicators), " rows to outputs/site_level_indicators.csv")
+message("  Years: ", paste(unique(site_indicators$Year), collapse = ", "))
 message("  Indicators: ", paste(unique(site_indicators$Indicator), collapse = ", "))
-message("  Sites: ", n_distinct(site_indicators$Site))  
-
+message("  Sites: ", n_distinct(site_indicators$Site))
