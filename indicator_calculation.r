@@ -51,45 +51,43 @@ benthic_cover_presence <- df_benthic_cover %>%
         Year = format(as.Date(Date), format = "%Y")
     )
 
-# Calculate live coral cover ---------------------------
-benthic_cover_presence_lcc <- benthic_cover_presence %>%
+# Calculate live coral and macroalgae cover ---------------------------
+benthic_cover_tran <- benthic_cover_presence %>%
     group_by(Year, Site, Transect) %>%
-    mutate(Coral_Cover_Tran = 100 * sum(Coral_Presence) / n()) %>%
-    group_by(Year, Site) %>%
-    mutate(Coral_Cover_Site = mean(Coral_Cover_Tran))
-indicator_lcc <- benthic_cover_presence_lcc %>%
-    group_by(Year) %>%
     summarize(
-        `Min (Site)` = min(Coral_Cover_Site),
-        `Av. (Site)` = mean(Coral_Cover_Site),
-        `Median (Site)` = median(Coral_Cover_Site),
-        `Max (Site)` = max(Coral_Cover_Site),
-        `Min (Transect)` = min(Coral_Cover_Tran),
-        `Av. (Transect)` = mean(Coral_Cover_Tran),
-        `Median (Transect)` = median(Coral_Cover_Tran),
-        `Max (Transect)` = max(Coral_Cover_Tran)
-    ) %>%
-    mutate(across(-Year, ~ round(.x, 2)))
-
-# Calculate macroalgae cover ---------------------------
-benthic_cover_presence_fma <- benthic_cover_presence %>%
-    group_by(Year, Site, Transect) %>%
-    mutate(Algae_Cover_Tran = 100 * sum(Algae_Presence) / n()) %>%
+        Coral_Cover_Tran = 100 * mean(Coral_Presence),
+        Algae_Cover_Tran = 100 * mean(Algae_Presence),
+        .groups = "drop"
+    )
+benthic_cover_site <- benthic_cover_tran %>%
     group_by(Year, Site) %>%
-    mutate(Algae_Cover_Site = mean(Algae_Cover_Tran))
-indicator_fma <- benthic_cover_presence_fma %>%
-    group_by(Year) %>%
     summarize(
-        `Min (Site)` = min(Algae_Cover_Site),
-        `Av. (Site)` = mean(Algae_Cover_Site),
-        `Median (Site)` = median(Algae_Cover_Site),
-        `Max (Site)` = max(Algae_Cover_Site),
-        `Min (Transect)` = min(Algae_Cover_Tran),
-        `Av. (Transect)` = mean(Algae_Cover_Tran),
-        `Median (Transect)` = median(Algae_Cover_Tran),
-        `Max (Transect)` = max(Algae_Cover_Tran)
-    ) %>%
-    mutate(across(-Year, ~ round(.x, 2)))
+        Coral_Cover_Site = mean(Coral_Cover_Tran),
+        Algae_Cover_Site = mean(Algae_Cover_Tran),
+        .groups = "drop"
+    )
+summarize_cover <- function(site_col, tran_col) {
+    site_stats <- benthic_cover_site %>%
+        group_by(Year) %>%
+        summarize(
+            `Min (Site)` = min({{ site_col }}),
+            `Av. (Site)` = mean({{ site_col }}),
+            `Median (Site)` = median({{ site_col }}),
+            `Max (Site)` = max({{ site_col }})
+        )
+    tran_stats <- benthic_cover_tran %>%
+        group_by(Year) %>%
+        summarize(
+            `Min (Transect)` = min({{ tran_col }}),
+            `Av. (Transect)` = mean({{ tran_col }}),
+            `Median (Transect)` = median({{ tran_col }}),
+            `Max (Transect)` = max({{ tran_col }})
+        )
+    left_join(site_stats, tran_stats, by = "Year") %>%
+        mutate(across(-Year, ~ round(.x, 2)))
+}
+indicator_lcc <- summarize_cover(Coral_Cover_Site, Coral_Cover_Tran)
+indicator_fma <- summarize_cover(Algae_Cover_Site, Algae_Cover_Tran)
 
 # Calculate recruit density ---------------------------
 benthic_recruits_rd <- df_recruits %>%
@@ -184,13 +182,11 @@ indicator_relief <- fish_relief %>%
 
 message("---- Exporting site-level indicator values ----")                                             
 
-site_coral_cover <- benthic_cover_presence_lcc %>%                                                     
-  distinct(Year, Site, Value = Coral_Cover_Site) %>%                                                 
-  mutate(Indicator = "Live_Coral_Cover")                                                             
+site_coral_cover <- benthic_cover_site %>%
+  transmute(Year, Site, Value = Coral_Cover_Site, Indicator = "Live_Coral_Cover")
 
-site_macroalgae <- benthic_cover_presence_fma %>%                                                      
-  distinct(Year, Site, Value = Algae_Cover_Site) %>% 
-  mutate(Indicator = "Fleshy_Macroalgae_Cover")                                                      
+site_macroalgae <- benthic_cover_site %>%
+  transmute(Year, Site, Value = Algae_Cover_Site, Indicator = "Fleshy_Macroalgae_Cover")
 
 site_recruits <- benthic_recruits_rd %>%                                                               
   ungroup() %>%                                   
