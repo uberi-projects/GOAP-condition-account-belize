@@ -37,12 +37,16 @@ if (nrow(split_sites) > 0) {
 }
 
 # Prepare data ---------------------------
-df_organisms_unique <- df_organisms %>% distinct(Code, Type)
+# "Newly Dead" coral is not live coral, so it gets its own type for the coral presence calculation
+if (!"State" %in% names(df_organisms)) df_organisms$State <- NA_character_
+df_organisms_unique <- df_organisms %>%
+    distinct(Code, Type, State) %>%
+    mutate(Coral_Type = ifelse(State %in% "Newly Dead", "Newly Dead Coral", Type))
 benthic_cover_presence <- df_benthic_cover %>%
-    left_join(df_organisms_unique %>% select(Code, Primary_Type = Type), by = c("Organism" = "Code")) %>%
-    left_join(df_organisms_unique %>% select(Code, Secondary_Type = Type), by = c("Secondary" = "Code")) %>%
+    left_join(df_organisms_unique %>% select(Code, Primary_Type = Type, Primary_Coral_Type = Coral_Type), by = c("Organism" = "Code")) %>%
+    left_join(df_organisms_unique %>% select(Code, Secondary_Type = Type, Secondary_Coral_Type = Coral_Type), by = c("Secondary" = "Code")) %>%
     mutate(
-        Coral_Presence = Vectorize(calculate_type_presence)(Primary_Type, Secondary_Type, coral_category),
+        Coral_Presence = Vectorize(calculate_type_presence)(Primary_Coral_Type, Secondary_Coral_Type, coral_category),
         Algae_Presence = Vectorize(calculate_type_presence)(Primary_Type, Secondary_Type, algae_category),
         Year = format(as.Date(Date), format = "%Y")
     )
