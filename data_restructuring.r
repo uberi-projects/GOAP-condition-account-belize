@@ -106,10 +106,10 @@ df_invertebrates <- df_benthic_transects %>%
     ungroup() %>%
     select(Date, EA_Period, Site, Temp, Visibility, Weather, Transect, Species, Num, Collector, Notes)
 df_organisms <- df_organisms_preliminary %>%
-    left_join(df_coralspp_lookup, by = "ID") %>%
-    left_join(df_organisms_group %>% rename(Category = ID), by = "Category") %>%
-    mutate(Code = ID, `Scientific Name` = paste(Genus, Species), Type = Name) %>%
-    select(Code, `Scientific Name`, Type)
+    left_join(df_coralspp_lookup %>% select(`Coral Taxonomy` = ID, Coral_Name = Name), by = "Coral Taxonomy") %>%
+    left_join(df_organisms_group %>% select(Category = ID, Type = Name), by = "Category") %>%
+    mutate(Code = ID, `Scientific Name` = coalesce(Coral_Name, Name)) %>% # coral taxon name, else the benthic category name
+    select(Code, `Scientific Name`, Type, State)
 df_coral_community <- df_coral_community_preliminary %>%
     left_join(df_coral_community_transects %>% rename(Transect = ID), by = "Transect") %>%
     left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
