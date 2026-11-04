@@ -10,6 +10,32 @@ source("data_validation.r")
 coral_category <- ifelse(test_on == TRUE, "Coral", "Calcifiers :: Coral")
 algae_category <- ifelse(test_on == TRUE, "Fleshy Macroalgae", "Algae :: Macro :: Fleshy")
 
+# Check inputs ---------------------------
+stopifnot(
+    "Duplicate organism codes in df_organisms" = !anyDuplicated(df_organisms$Code),
+    "Missing Site in benthic data" = !anyNA(df_benthic_cover$Site),
+    "Missing Site in coral data" = !anyNA(df_coral_community$Site),
+    "Missing Site in fish data" = !anyNA(df_fish$Site)
+)
+unknown_codes <- setdiff(df_benthic_cover$Organism, df_organisms$Code)
+if (length(unknown_codes) > 0) {
+    stop("Benthic codes missing from df_organisms: ", paste(unknown_codes, collapse = ", "))
+}
+# A site whose transects fall in different years is usually a mis-typed survey date
+split_sites <- bind_rows(
+    df_benthic_cover %>% distinct(Site, Transect, Date),
+    df_coral_community %>% distinct(Site, Transect, Date),
+    df_fish %>% distinct(Site, Transect, Date)
+) %>%
+    mutate(Year = format(as.Date(Date), format = "%Y")) %>%
+    group_by(Site) %>%
+    filter(n_distinct(Year) > 1) %>%
+    count(Site, Year)
+if (nrow(split_sites) > 0) {
+    warning("Sites with transects in more than one year (check survey dates):\n",
+            paste(capture.output(print(as.data.frame(split_sites))), collapse = "\n"))
+}
+
 # Prepare data ---------------------------
 df_organisms_unique <- df_organisms %>% distinct(Code, Type)
 benthic_cover_presence <- df_benthic_cover %>%
