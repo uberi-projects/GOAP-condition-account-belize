@@ -212,5 +212,6 @@ for (section_name in names(validation_msgs_sections)) {
         validation_msgs_sections[[section_name]], ""
     )
 }
+dir.create("outputs", showWarnings = FALSE)
 writeLines(validation_msgs, "outputs/validation_report.txt")
 
