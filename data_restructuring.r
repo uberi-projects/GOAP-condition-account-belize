@@ -84,7 +84,7 @@ df_recruits <- df_recruits_preliminary %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name.y),
-        Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index`,
+        Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Quadrat = `Quadrat Index` + 1, # AGRRA numbers quadrats 0-4
         Primary_Substrate = Primary, Secondary_Substrate = Secondary, Organism = Taxonomy,
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
