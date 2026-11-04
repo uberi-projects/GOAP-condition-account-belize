@@ -75,11 +75,12 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         Date, EA_Period, Site, Time, Temp, Visibility, Weather, Start_Depth, End_Depth, Depth, Transect,
         Point, Organism, Secondary, Algae_Height, Collector, Notes
     )
-df_recruits <- df_recruits_preliminary %>%
+# Start from every recorded quadrat so substrate is kept for quadrats without recruits
+df_recruits <- df_quadrats %>%
+    full_join(df_recruits_preliminary, by = c("Transect", "Quadrat Index")) %>%
     left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
     left_join(df_transects %>% rename(Transect = ID), by = "Transect") %>%
     left_join(df_surveys %>% rename(Survey.x = ID), by = "Survey.x") %>%
-    left_join(df_quadrats, by = c("Transect", "Quadrat Index")) %>%
     left_join(df_coralspp_lookup %>% rename(Taxonomy = ID), by = "Taxonomy") %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
@@ -89,6 +90,8 @@ df_recruits <- df_recruits_preliminary %>%
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
+    filter(!is.na(Organism) | Size == "SR") %>% # quadrats without recruits keep one row with Num = 0
+    mutate(Size = ifelse(is.na(Organism), NA, Size), Num = coalesce(Num, 0)) %>%
     left_join(df_benthic_transect_numbers, by = "Transect") %>%
     mutate(Transect = Transect_Number) %>%
     select(
