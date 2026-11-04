@@ -59,6 +59,8 @@ checks_sites <- list(
 validation_msgs_sites <- sapply(checks_sites, eval)
 
 # Validate  Coral Community ---------------------------
+# Corals with several diseases hold them as one "; "-separated value
+coral_disease_values <- trimws(unlist(strsplit(df_coral_community$Disease, ";")))
 check_coral_community <- list(
     quote(check_completeness(df_coral_community, columns_coral_community)),
     quote(check_date(df_coral_community$Date)),
@@ -82,7 +84,7 @@ check_coral_community <- list(
     quote(check_range(df_coral_community$OD, 0, 100, c("int"))),
     quote(check_range(df_coral_community$TD, 0, 100, c("int"))),
     quote(check_range(df_coral_community$RD, 0, 100, c("int"))),
-    quote(check_grouping(df_coral_community$Disease, df_disease$`Genus / Group`)),
+    quote(check_grouping(coral_disease_values, df_disease$`Genus / Group`)),
     quote(check_range(df_coral_community$Clump_L, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Clump_P, 0, 30, c("int"))),
     quote(check_range(df_coral_community$Clump_BL, 0, 30, c("int"))),

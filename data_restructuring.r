@@ -125,7 +125,12 @@ df_coral_community <- df_coral_community_preliminary %>%
         RD = New * 100, Clump_L = NA, Clump_P = NA, Clump_BL = NA, Clump_NM = NA, Clump_TM = NA, Clump_OM = NA, Clump_Other = NA,
         Clump_Interval = NA, Collector = Surveyor, Notes = Comments.x
     ) %>%
-    left_join(df_coral_community_diseases, by = "Coral") %>%
+    left_join( # one row per coral, even when a coral has several diseases
+        df_coral_community_diseases %>%
+            group_by(Coral) %>%
+            summarize(Transect = first(Transect), Disease = paste(Disease, collapse = "; ")),
+        by = "Coral"
+    ) %>%
     group_by(Survey.x) %>%
     mutate(Transect = Transect.x, Transect = match(Transect, unique(Transect))) %>%
     ungroup() %>%
