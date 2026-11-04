@@ -39,6 +39,12 @@ df_formations <- df_surveys %>%
     filter(!is.na(`Reef Zone`) | !is.na(`Reef Type`))
 
 # Convert AGRRA formatted data to GOAP formatted data ---------------------------
+# Number benthic transects once per survey so cover, recruits and invertebrates share transect numbers
+df_benthic_transect_numbers <- df_benthic_transects %>%
+    group_by(Survey) %>%
+    mutate(Transect_Number = row_number()) %>%
+    ungroup() %>%
+    select(Transect = ID, Transect_Number)
 df_sites <- df_surveys %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
@@ -63,9 +69,8 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
         End_Depth = NA, Point = `Point Index` / 10, Organism = Primary,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
     ) %>%
-    group_by(Survey.x) %>%
-    mutate(Transect = match(Transect, unique(Transect))) %>%
-    ungroup() %>%
+    left_join(df_benthic_transect_numbers, by = "Transect") %>%
+    mutate(Transect = Transect_Number) %>%
     select(
         Date, EA_Period, Site, Time, Temp, Visibility, Weather, Start_Depth, End_Depth, Transect,
         Point, Organism, Secondary, Algae_Height, Collector, Notes
@@ -84,9 +89,8 @@ df_recruits <- df_recruits_preliminary %>%
         LR = Large, SR = Small, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("SR", "LR"), names_to = "Size", values_to = "Num") %>%
-    group_by(Survey.x) %>%
-    mutate(Transect = match(Transect, unique(Transect))) %>%
-    ungroup() %>%
+    left_join(df_benthic_transect_numbers, by = "Transect") %>%
+    mutate(Transect = Transect_Number) %>%
     select(
         Date, EA_Period, Site, Temp, Visibility, Weather, Transect, Quadrat, Primary_Substrate,
         Secondary_Substrate, Organism, Size, Num, Collector, Notes
@@ -101,9 +105,8 @@ df_invertebrates <- df_benthic_transects %>%
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Collector = Surveyor, Notes = Comments.x
     ) %>%
     pivot_longer(cols = c("Juvenile Diadema", "Adult Diadema", "Other Urchins", "Lobster", "Conch", "Sea Cucumber"), names_to = "Species", values_to = "Num") %>%
-    group_by(Survey.x) %>%
-    mutate(Transect = match(Transect, unique(Transect))) %>%
-    ungroup() %>%
+    left_join(df_benthic_transect_numbers, by = "Transect") %>%
+    mutate(Transect = Transect_Number) %>%
     select(Date, EA_Period, Site, Temp, Visibility, Weather, Transect, Species, Num, Collector, Notes)
 df_organisms <- df_organisms_preliminary %>%
     left_join(df_coralspp_lookup %>% select(`Coral Taxonomy` = ID, Coral_Name = Name), by = "Coral Taxonomy") %>%
