@@ -64,7 +64,7 @@ df_benthic_cover <- df_benthic_cover_preliminary %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
         EA_Period = NA, Date = format(Surveyed, format = "%Y-%m-%d"),
-        Site = ifelse(!is.na(Code) & Code != "", Code, Name.y), Time = format(Surveyed, format = "%H:%M"),
+        Site = ifelse(!is.na(Code) & Code != "", Code, Name.y), Time = na_if(format(Surveyed, format = "%H:%M"), "00:00"),
         Temp = `Water Temperature (°C)`, Visibility = NA, Weather = NA, Start_Depth = NA,
         End_Depth = NA, Point = `Point Index` / 10, Organism = Primary,
         Algae_Height = `Algal Height (cm)`, Collector = Surveyor, Notes = Comments.x
@@ -122,7 +122,7 @@ df_coral_community <- df_coral_community_preliminary %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
         Date = format(Surveyed, format = "%Y-%m-%d"), EA_Period = NA, Site = ifelse(!is.na(Site_Code) & Site_Code != "", Site_Code, Site_Name),
-        Time = format(Surveyed, format = "%H:%M"), Area_Surveyed = `Length Surveyed (m)`, Temp = `Water Temperature (°C)`,
+        Time = na_if(format(Surveyed, format = "%H:%M"), "00:00"), Area_Surveyed = `Length Surveyed (m)`, Temp = `Water Temperature (°C)`,
         Visibility = NA, Weather = NA, Start_Depth = NA, End_Depth = NA, Organism = Taxonomy, Max_Length = Length,
         Max_Width = Width, Max_Height = Height, Percent_Pale = Pale * 100, Percent_Bleach = Bleached * 100, OD = Old * 100, TD = Transitional * 100,
         RD = New * 100, Clump_L = NA, Clump_P = NA, Clump_BL = NA, Clump_NM = NA, Clump_TM = NA, Clump_OM = NA, Clump_Other = NA,
