@@ -49,12 +49,12 @@ df_sites <- df_surveys %>%
     filter(Subregion == "Northern Barrier Complex") %>%
     mutate(
         EAA_Code = NA, Site = ifelse(!is.na(Code) & Code != "", Code, Name), Depth = NA, MPA_Management = NA,
-        Management_Zone = NA, Reef_Zone = `Reef Zone`, Reef_Type = `Reef Type`, Notes = Comments
+        Management_Zone = NA, Protection_Status = NA, Reef_Zone = `Reef Zone`, Reef_Type = `Reef Type`, Notes = Comments
     ) %>%
     distinct(Site, .keep_all = TRUE) %>% 
     select(
         EAA_Code, Site, Depth, Latitude, Longitude, MPA_Management, Management_Zone,
-        Reef_Zone, Reef_Type, Notes
+        Protection_Status, Reef_Zone, Reef_Type, Notes
     )
 df_benthic_cover <- df_benthic_cover_preliminary %>%
     left_join(df_benthic_transects %>% rename(Transect = ID), by = "Transect") %>%
